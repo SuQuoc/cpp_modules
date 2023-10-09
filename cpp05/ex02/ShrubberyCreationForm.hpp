@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <fstream>
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
@@ -17,4 +18,5 @@ public:
 	~ShrubberyCreationForm(void);
 
 	void execute(Bureaucrat const & executor) const;
+	std::string getTarget(void) const;
 };

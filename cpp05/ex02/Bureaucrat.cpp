@@ -100,3 +100,21 @@ void Bureaucrat::signForm(AForm& form)
 	"✅ " << this->_name << " signed " << form.getName()
 	<< std::endl;
 }
+
+void Bureaucrat::executeForm(AForm const & form) const
+{
+	try
+	{
+		form.execute(*this);
+	}
+	catch(GradeTooLowException& e)
+	{
+		std::cout << 		
+		"❌ " << this->_name << " couldn't execute " << form.getName() << ", " << e.what()
+		<< std::endl;
+		return ;
+	}
+	std::cout << 
+	"✅ " << this->_name << " executed 🗡️  " << form.getName()
+	<< std::endl;
+}

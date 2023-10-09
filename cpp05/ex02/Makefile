@@ -6,10 +6,18 @@ CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98
 SRC_PATH 	= .
 OBJ_PATH 	= obj
 
-HDR			= 	Bureaucrat.hpp AForm.hpp ShrubberyCreationForm.hpp
+HDR			= 	Bureaucrat.hpp \
+				AForm.hpp \
+				ShrubberyCreationForm.hpp \
+				RobotomyRequestForm.hpp \
+				PresidentialPardonForm.hpp
 
-SRCS		= 	main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp
-
+SRCS		= 	main.cpp \
+				Bureaucrat.cpp \
+				AForm.cpp \
+				ShrubberyCreationForm.cpp \
+				RobotomyRequestForm.cpp \
+				PresidentialPardonForm.cpp
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
@@ -32,6 +40,7 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HDR)
 #General________________________________________________________
 clean:
 	rm -rf $(OBJ_PATH)
+	rm -rf Backyard
 	@echo "$(MAGENTA)Obj directory removed.$(NC)"
 
 fclean: clean

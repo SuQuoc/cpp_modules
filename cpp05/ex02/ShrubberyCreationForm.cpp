@@ -8,7 +8,8 @@ ShrubberyCreationForm::ShrubberyCreationForm (void)
 }
 
 ShrubberyCreationForm::ShrubberyCreationForm (const ShrubberyCreationForm& src):
-AForm(src)
+AForm(src),
+_target(src._target)
 {
 	printMessage(std::cout, "ShrubberyCreationForm copy constructor called", BLUE);
 	*this = src;
@@ -38,20 +39,60 @@ _target(target)
 	checkGradeRange(this->getReqGradeToExe());
 }
 
+//Form specific execution________________________________________________
+void printTree(std::ofstream& outputFile, int height) 
+{
+    // Print the tree
+    for (int i = 0; i < height; ++i) 
+	{
+        for (int j = 0; j < height - i - 1; ++j)
+            outputFile << " ";
+        
+        for (int k = 0; k < 2 * i + 1; ++k)
+            outputFile << "*";
+        
+        outputFile << std::endl;
+    }
+
+    // Print the trunk
+    int trunkWidth = height / 3;
+    int trunkHeight = height / 3;
+    for (int i = 0; i < trunkHeight; ++i)
+	{
+        for (int j = 0; j < height - trunkWidth / 2; ++j)
+            outputFile << " ";
+        
+        for (int k = 0; k < trunkWidth; ++k)
+            outputFile << "|";
+        
+        outputFile << std::endl;
+    }
+}
 
 //FORCED member functions________________________________________________
 void ShrubberyCreationForm::execute(Bureaucrat const & executor) const
 {
-	if (this->getSign() == true)
+	if (this->getSign() == false)
+		printMessage(std::cout, "Error: Form not signed!", RED);
+	else if ((executor.getGrade() <= this->getReqGradeToExe()))
 	{
-		if (executor.getGrade() <= this->getReqGradeToExe())
-		{
-			printMessage(std::cout, "BAUSTELLE ...", RED);
-		}
-		else
-			throw GradeTooLowException();
+			std::ofstream file(_target.c_str());
+			if (file.is_open())
+			{
+				printTree(file, 12);
+				file.close();
+			}
 	}
 	else
-		printMessage(std::cout, "Error: Form not signed!", RED);
+		throw GradeTooLowException();
 }
+
+
+//getters________________________________________________________________
+std::string ShrubberyCreationForm::getTarget(void) const
+{
+	return this->_target;
+}
+
+
 
