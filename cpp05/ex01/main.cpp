@@ -11,15 +11,16 @@
 
 #define LINE    std::cout << BLUE << "---------------------------" << RESET << std::endl;
 
-
+// deconstructur isnt called cuz of the throw  
+// -> nothing to destroy if nothing was build.
 void outOfBoundsForm()
 {
 	LINE;
 	printMessage(std::cout, "outOfBoundsForm", BLUE);
-	Form f1("AMS Antrag", 0, 1);
-	//Form f1("AMS Antrag", 151, 10);
-	//Form f1("AMS Antrag", 10, -10);
-	//Form f1("AMS Antrag", 10, 1110);
+	// Form f1("AMS Antrag", 0, 1);
+	// Form f1("AMS Antrag", 1, -1);
+	// Form f1("AMS Antrag", 151, 1);
+	// Form f1("AMS Antrag", 1, 151);
 }
 
 void signingTest()
@@ -31,11 +32,36 @@ void signingTest()
 	Bureaucrat b3("Stefan", 11);
 
 	Form f1("AMS Antrag", 10, 50);
-	f1.beSigned(b1);
-	f1.beSigned(b2);
-	f1.beSigned(b3);
+	//f1.beSigned(b1);
+	//f1.beSigned(b2);
+	try
+	{
+		f1.beSigned(b3);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
+	}
+	std::cout << f1;
 }
 
+void signingBureaucratTest()
+{
+	LINE;
+	printMessage(std::cout, "signingTest", BLUE);
+	Bureaucrat b1("Michi", 9);
+	Bureaucrat b2("Claus", 50);
+
+	Form f1("AMS Antrag", 10, 50);
+	std::cout << f1;
+
+	//b1.signForm(f1);
+	//std::cout << f1;
+	//LINE;
+
+	b2.signForm(f1);
+	std::cout << f1;
+}
 
 void testFrameWork(void (*funcPTR)())
 {
@@ -55,12 +81,18 @@ void testFrameWork(void (*funcPTR)())
 	}
 }
 
-int main()
+int main(int argc, char **argv)
 {
-	testFrameWork(outOfBoundsForm); 
-	// deconstructur isnt called cuz of the throw  
-	// -> nothing to destroy if nothing was build.
-	testFrameWork(signingTest);
-	// Form f1("AMS Antrag", 10, 1);
-	// std::cout << f1;
+	if (argc != 2)
+		return 1;
+	std::string in = argv[1];
+	if (in == "1")
+		testFrameWork(outOfBoundsForm);
+	else if (in == "2")
+		testFrameWork(signingTest);
+	else if (in == "3")
+		testFrameWork(signingBureaucratTest);
+
+	//Form f1;
+	//Bureaucrat b1;
 }

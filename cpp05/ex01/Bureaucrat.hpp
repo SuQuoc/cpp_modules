@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "Form.hpp"
 #include <iostream>
 
 #define BEST_GRADE 	1
@@ -11,6 +12,8 @@
 #define GREEN   "\033[32m"
 #define YELLOW  "\033[33m"
 #define BLUE    "\033[34m"
+
+class Form; //not sure if thats wanted
 
 class Bureaucrat
 {
@@ -27,7 +30,8 @@ public:
 
 	void upGrade();
 	void downGrade();
-
+	void signForm(Form& form);
+	
 	std::string getName() const;
 	int getGrade() const;
 };

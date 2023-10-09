@@ -13,6 +13,8 @@
 #define YELLOW  "\033[33m"
 #define BLUE    "\033[34m"
 
+class Bureaucrat; //not sure if thats wanted
+
 class Form
 {
 private: 

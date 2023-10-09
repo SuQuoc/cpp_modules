@@ -85,11 +85,10 @@ void Form::beSigned(const Bureaucrat& signer)
 	if (signer.getGrade() <= this->getReqGradeToSign())
 	{
 		this->_signed = true;
-		printMessage(std::cout, "Form successfully signed ✅", RESET);
+		//printMessage(std::cout, "Form successfully signed ✅", RESET);
 	}
 	else
 		throw GradeTooLowException();
-		//printMessage(std::cout, "Denied! Grade to low to sign.", RESET);
 }
 
 

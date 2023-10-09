@@ -83,5 +83,23 @@ const char* GradeTooLowException::what() const throw()
 }
 
 
+void Bureaucrat::signForm(Form& form)
+{
+	try
+	{
+		form.beSigned(*this);
+	}
+	catch (GradeTooLowException& e)
+	{
+		std::cout << 
+		"❌ " << this->_name << " couldn't sign " << form.getName() << " " << e.what()
+		<< std::endl;
+		return ;
+	}
+	std::cout << 
+	"✅ " << this->_name << " signed " << form.getName()
+	<< std::endl;
+}
+
 
 
