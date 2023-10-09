@@ -6,11 +6,9 @@ CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98
 SRC_PATH 	= .
 OBJ_PATH 	= obj
 
-HDR			= 	Bureaucrat.hpp Form.hpp
+HDR			= 	Bureaucrat.hpp AForm.hpp ShrubberyCreationForm.hpp
 
-SRCS		= 	main.cpp \
-				Bureaucrat.cpp \
-				Form.cpp
+SRCS		= 	main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp
 
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
