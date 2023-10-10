@@ -53,7 +53,7 @@ void RobotomyRequestForm::execute(Bureaucrat const & executor) const
 	else
 	{
 		std::cout << "🤖 robotomy failed. MANUAL LABOR ✊✊✊!" << std::endl;
-		throw GradeTooLowException();
+		throw AForm::GradeTooLowException();
 	}
 }
 

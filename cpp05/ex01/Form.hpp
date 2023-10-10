@@ -36,21 +36,19 @@ public:
 	bool getSign() const;
 
 	void beSigned(const Bureaucrat& signer);
+
+	class GradeTooHighException: public std::exception
+	{
+		public:
+			virtual const char* what() const throw();
+	};
+
+	class GradeTooLowException: public std::exception
+	{
+		public:
+			virtual const char* what() const throw();
+	};
 };
 
 std::ostream& operator << (std::ostream& stream, const Form& rhs);
 void printMessage(std::ostream& output, const std::string& msg, const std::string& color);
-
-
-//class GradeTooHighException: public std::exception
-//{
-//	public:
-//		virtual const char* what() const throw();
-//};
-//
-//
-//class GradeTooLowException: public std::exception
-//{
-//	public:
-//		virtual const char* what() const throw();
-//};

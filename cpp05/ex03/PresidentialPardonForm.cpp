@@ -49,7 +49,7 @@ void PresidentialPardonForm::execute(Bureaucrat const & executor) const
 		std::cout << this->getTarget() << " has been pardoned by Zaphod Beeblebrox 🧻" << std::endl;
 	}
 	else
-		throw GradeTooLowException();
+		throw AForm::GradeTooLowException();
 }
 
 

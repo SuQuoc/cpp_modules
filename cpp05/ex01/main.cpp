@@ -17,7 +17,7 @@ void outOfBoundsForm()
 {
 	LINE;
 	printMessage(std::cout, "outOfBoundsForm", BLUE);
-	// Form f1("AMS Antrag", 0, 1);
+	Form f1("AMS Antrag", 0, 1);
 	// Form f1("AMS Antrag", 1, -1);
 	// Form f1("AMS Antrag", 151, 1);
 	// Form f1("AMS Antrag", 1, 151);
@@ -75,7 +75,7 @@ void testFrameWork(void (*funcPTR)())
 	{
 		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
 	}
-	catch (GradeTooHighException& e) // specific catch
+	catch (Form::GradeTooLowException& e) // specific catch
 	{
 		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
 	}

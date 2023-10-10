@@ -17,10 +17,10 @@ void testFrameWork(void (*funcPTR)())
 	{
 		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
 	}
-	catch (GradeTooHighException& e) // specific catch
-	{
-		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
-	}
+	// catch (AForm::GradeTooHighException& e) // specific catch
+	// {
+		// std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
+	// }
 }
 
 void deepCopyTest()

@@ -1,25 +1,15 @@
-NAME		= a.out
+NAME		= convert
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98
+CXXFLAGS	= -Wall -Werror -Wextra -Wconversion -MMD -MP -std=c++98
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj
 
-HDR			= 	Bureaucrat.hpp \
-				AForm.hpp \
-				ShrubberyCreationForm.hpp \
-				RobotomyRequestForm.hpp \
-				PresidentialPardonForm.hpp \
-				Intern.hpp
+HDR			= 	ScalarConverter.hpp \
 
 SRCS		= 	main.cpp \
-				Bureaucrat.cpp \
-				AForm.cpp \
-				ShrubberyCreationForm.cpp \
-				RobotomyRequestForm.cpp \
-				PresidentialPardonForm.cpp \
-				Intern.cpp
+				ScalarConverter.cpp \
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 

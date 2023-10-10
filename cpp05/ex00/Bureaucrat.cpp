@@ -37,9 +37,9 @@ Bureaucrat::Bureaucrat(const std::string& name, int grade)
 {
     std::cout << "Bureaucrat parametric constructor called" << std::endl;
 	if (grade < BEST_GRADE) 
-		throw GradeTooLowException();
+		throw Bureaucrat::GradeTooLowException();
 	else if (WORST_GRADE < grade)
-		throw GradeTooHighException();
+		throw Bureaucrat::GradeTooHighException();
 	_grade = grade;
 }
 
@@ -56,24 +56,24 @@ int Bureaucrat::getGrade() const
 void Bureaucrat::upGrade()
 {
 	if (_grade == BEST_GRADE)
-		throw GradeTooHighException();
+		throw Bureaucrat::GradeTooHighException();
 	_grade--;
 }
 
 void Bureaucrat::downGrade()
 {
 	if (_grade == WORST_GRADE)
-		throw GradeTooHighException();
+		throw Bureaucrat::GradeTooHighException();
 	_grade++;
 
 }
 
-const char* GradeTooHighException::what() const throw()
+const char* Bureaucrat::GradeTooHighException::what() const throw()
 {
 	return ("Grade is too high get vacation!");
 }
 
-const char* GradeTooLowException::what() const throw()
+const char* Bureaucrat::GradeTooLowException::what() const throw()
 {
 	return ("Grade is too low, work work work!");
 }

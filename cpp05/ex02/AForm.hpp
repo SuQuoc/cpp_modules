@@ -35,8 +35,19 @@ public:
 	bool getSign() const;
 
 	void beSigned(const Bureaucrat& signer);
-
 	virtual void execute(Bureaucrat const & executor) const = 0; // NICHT SICHER OB HIER DAS PURE VIRTUAL GEHOERT
+
+	class GradeTooHighException: public std::exception
+	{
+		public:
+			virtual const char* what() const throw();
+	};
+
+	class GradeTooLowException: public std::exception
+	{
+		public:
+			virtual const char* what() const throw();
+	};
 };
 
 std::ostream& operator << (std::ostream& stream, const AForm& rhs);

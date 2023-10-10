@@ -17,12 +17,12 @@ void up_down_grade_test(void)
 		//b3.upGrade();
 		b3.downGrade();
 	}
-	catch (GradeTooHighException& e)
+	catch (Bureaucrat::GradeTooHighException& e)
 	{
 		std::cerr << RED << "1st catch: " << e.what() << std::endl << RESET;
 		exit(1);
 	}
-	catch (GradeTooLowException& e)
+	catch (Bureaucrat::GradeTooLowException& e)
 	{
 		std::cerr << RED << "2nd catch: " << e.what() << std::endl << RESET;
 		exit(1);
@@ -61,12 +61,12 @@ int main(int argc, char **argv)
 	{
 		Bureaucrat b1(name, grade);
 	}
-	catch (GradeTooHighException& e)
+	catch (Bureaucrat::GradeTooHighException& e)
 	{
 		std::cerr << RED << "1st catch: " << e.what() << std::endl << RESET;
 		return 1;
 	}
-	catch (GradeTooLowException& e)
+	catch (Bureaucrat::GradeTooLowException& e)
 	{
 		std::cerr << RED << "2nd catch: " << e.what() << std::endl << RESET;
 		return 1;

@@ -84,7 +84,7 @@ void ShrubberyCreationForm::execute(Bureaucrat const & executor) const
 			}
 	}
 	else
-		throw GradeTooLowException();
+		throw AForm::GradeTooLowException();
 }
 
 

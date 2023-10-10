@@ -16,7 +16,7 @@ Intern::Intern (const Intern& src)
 Intern& Intern::operator = (const Intern& rhs)
 {
 	printMessage(std::cout, "Intern copy assignment operator called", BLUE);
-	return *this;
+	return const_cast<Intern&>(rhs);
 }
 
 Intern::~Intern (void)
@@ -25,26 +25,52 @@ Intern::~Intern (void)
 }
 
 
+//utils for member functions______________________________________
+int resolveForm(const std::string& formName)
+{
+	enum Forms
+	{
+		Invalid = 0,
+		ShrubberyCreationForm,
+		RobotomyRequestForm,
+		PresidentialPardonForm,
+	};
+
+	if (formName == "shrubbery creation")
+		return ShrubberyCreationForm;
+	if (formName == "robotomy request")
+		return RobotomyRequestForm;
+	if (formName == "presidential pardon")
+		return PresidentialPardonForm;
+
+	return Invalid;
+}
+
 //member functions________________________________________________
 AForm* Intern::makeForm(const std::string& formName, const std::string& target)
 {
 	AForm* formPTR;
 
-	switch()
+	switch(resolveForm(formName))
 	{
 		case 1:
 			formPTR = new ShrubberyCreationForm(target);
-			return formPTR;
+			break;
 		case 2:
 			formPTR = new RobotomyRequestForm(target);
-			return formPTR;
+			break;
 		case 3:
 			formPTR = new PresidentialPardonForm(target);
-			return formPTR;
+			break;
 		default:
 			std::cout << "Requested form doesnt exist" << std::endl;
-			return (NULL);
+			throw FormNonExistentException();
 	}
+	std::cout << "Intern creates " << formPTR->getName() << std::endl;
+	return formPTR;
 }
 
-
+const char* Intern::FormNonExistentException::what() const throw()
+{
+	return ("Requested form doesnt exist");
+}

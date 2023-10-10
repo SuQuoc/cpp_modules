@@ -10,9 +10,9 @@ void printMessage(std::ostream& output, const std::string& msg, const std::strin
 void checkGradeRange(const int grade) 
 {
 	if (grade < BEST_GRADE) 
-		throw GradeTooLowException();
+		throw Form::GradeTooLowException();
 	else if (WORST_GRADE < grade)
-		throw GradeTooHighException();
+		throw Form::GradeTooHighException();
 }
 
 //overload of the insertion («) operator______________________
@@ -88,7 +88,7 @@ void Form::beSigned(const Bureaucrat& signer)
 		this->_signed = true;
 	}
 	else
-		throw GradeTooLowException();
+		throw Form::GradeTooLowException();
 }
 
 
@@ -115,13 +115,13 @@ bool Form::getSign() const
 
 
 
-//exceptions
-//const char* GradeTooHighException::what() const throw()
-//{
-//	return ("Grade is too high get vacation!");
-//}
-//
-//const char* GradeTooLowException::what() const throw()
-//{
-//	return ("Grade is too low, work work work!");
-//}
+//exceptions_______________________________________
+const char* Form::GradeTooLowException::what() const throw()
+{
+	return ("Grade is too low! (form)");
+}
+
+const char* Form::GradeTooHighException::what() const throw()
+{
+	return ("Grade is too high! (form)");
+}

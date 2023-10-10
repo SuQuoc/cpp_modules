@@ -31,22 +31,21 @@ public:
 	void upGrade();
 	void downGrade();
 	void signForm(Form& form);
-	
+ 
 	std::string getName() const;
 	int getGrade() const;
-};
 
+	class GradeTooHighException: public std::exception
+	{
+		public:
+			virtual const char* what() const throw();
+	};
 
-class GradeTooHighException: public std::exception
-{
-	public:
-		virtual const char* what() const throw();
-};
-
-class GradeTooLowException: public std::exception
-{
-	public:
-		virtual const char* what() const throw();
+	class GradeTooLowException: public std::exception
+	{
+		public:
+			virtual const char* what() const throw();
+	};
 };
 
 std::ostream& operator << (std::ostream& stream, const Bureaucrat& rhs);

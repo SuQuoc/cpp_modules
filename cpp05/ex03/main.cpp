@@ -2,6 +2,7 @@
 # include "ShrubberyCreationForm.hpp"
 # include "RobotomyRequestForm.hpp"
 # include "PresidentialPardonForm.hpp"
+# include "Intern.hpp"
 
 #define LINE    std::cout << BLUE << "---------------------------" << RESET << std::endl;
 
@@ -17,10 +18,10 @@ void testFrameWork(void (*funcPTR)())
 	{
 		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
 	}
-	catch (GradeTooHighException& e) // specific catch
-	{
-		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
-	}
+	//catch (AForm::GradeTooLowException& e) // specific catch
+	//{
+	//	std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
+	//}
 }
 
 void deepCopyTest()
@@ -72,17 +73,37 @@ void formBureaucratExecutionTest()
 	noob.executeForm(*f1_PTR);
 }
 
+void subject(const std::string &formName, const std::string &target)
+{
+	{
+		Intern someRandomIntern;
+		AForm* rrf;
+		rrf = someRandomIntern.makeForm(formName, target);
+		Bureaucrat boss("boss", 1);
+		rrf->beSigned(boss);
+		rrf->execute(boss);
+	}
+}
 
 int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return 1;
 	std::string in = argv[1];
-	if (in == "1")
-		testFrameWork(deepCopyTest);
-	if (in == "2")
-		testFrameWork(formExecutionTest);
-	if (in == "3")
-		testFrameWork(formBureaucratExecutionTest);
+	try
+	{
+		if (in == "0")
+			subject("shrubbery creation", "Backyard");
+		if (in == "1")
+			subject("robotomy request", "Bender");
+		if (in == "2")
+			subject("presidential pardon", "42 vienna");
+		if (in == "3")
+			subject("some form that doesnt exist", "blub");
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << RED << "Error: " << e.what() << std::endl << RESET;
+	}
 	return 0;
 }
