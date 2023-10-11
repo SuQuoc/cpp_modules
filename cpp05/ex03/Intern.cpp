@@ -28,22 +28,20 @@ Intern::~Intern (void)
 //utils for member functions______________________________________
 int resolveForm(const std::string& formName)
 {
-	enum Forms
+	std::string forms[] = 
 	{
-		Invalid = 0,
-		ShrubberyCreationForm,
-		RobotomyRequestForm,
-		PresidentialPardonForm,
+		"shrubbery creation", 
+		"robotomy request",
+		"presidential pardon"
 	};
 
-	if (formName == "shrubbery creation")
-		return ShrubberyCreationForm;
-	if (formName == "robotomy request")
-		return RobotomyRequestForm;
-	if (formName == "presidential pardon")
-		return PresidentialPardonForm;
-
-	return Invalid;
+    int num_strings = sizeof(forms) / sizeof(forms[0]);
+    for (int i = 0; i < num_strings; ++i) 
+	{
+        if (forms[i] == formName)
+			return i + 1;
+    }
+	return 0;
 }
 
 //member functions________________________________________________

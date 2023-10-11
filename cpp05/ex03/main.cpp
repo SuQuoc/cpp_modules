@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 	try
 	{
 		if (in == "0")
-			subject("shrubbery creation", "Backyard");
+			subject("shrubbery creation", "Garten");
 		if (in == "1")
 			subject("robotomy request", "Bender");
 		if (in == "2")

@@ -1,9 +1,6 @@
 
 #include "Bureaucrat.hpp"
 
-
-
-
 //Canonical form
 Bureaucrat::Bureaucrat (void)
 {
@@ -37,9 +34,9 @@ Bureaucrat::Bureaucrat(const std::string& name, int grade)
 {
     std::cout << "Bureaucrat parametric constructor called" << std::endl;
 	if (grade < BEST_GRADE) 
-		throw Bureaucrat::GradeTooLowException();
-	else if (WORST_GRADE < grade)
 		throw Bureaucrat::GradeTooHighException();
+	else if (WORST_GRADE < grade)
+		throw Bureaucrat::GradeTooLowException();
 	_grade = grade;
 }
 
@@ -63,7 +60,7 @@ void Bureaucrat::upGrade()
 void Bureaucrat::downGrade()
 {
 	if (_grade == WORST_GRADE)
-		throw Bureaucrat::GradeTooHighException();
+		throw Bureaucrat::GradeTooLowException();
 	_grade++;
 
 }

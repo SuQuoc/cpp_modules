@@ -76,17 +76,17 @@ void ShrubberyCreationForm::execute(Bureaucrat const & executor) const
 		printMessage(std::cout, "Error: Form not signed!", RED);
 	else if ((executor.getGrade() <= this->getReqGradeToExe()))
 	{
-			std::ofstream file(_target.c_str());
-			if (file.is_open())
-			{
-				printTree(file, 12);
-				file.close();
-			}
+		std::string filename = this->_target + "_shrubbery";
+		std::ofstream file(filename.c_str());
+		if (file.is_open())
+		{
+			printTree(file, 12);
+			file.close();
+		}
 	}
 	else
 		throw AForm::GradeTooLowException();
 }
-
 
 //getters________________________________________________________________
 std::string ShrubberyCreationForm::getTarget(void) const
