@@ -5,6 +5,15 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return 1;
+
+	double d = 12.;	
+	float f = 12.11f;	//.12f and 12.f both valid as the compiler doesnt cry 
+//.12f and 12.f both valid as the compiler doesnt cry 
+
+
+	std::cout << d << std::endl;
+	std::cout << f << std::endl;
+
 	// Implicit conversion
 	// double d = 324.234;
 	// int i = d;
