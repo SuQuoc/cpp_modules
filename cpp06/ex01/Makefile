@@ -1,15 +1,17 @@
-NAME		= convert
+NAME		= serialize
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -Wconversion -MMD -MP -std=c++98 -pedantic -g
+CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj
 
-HDR			= 	ScalarConverter.hpp \
+HDR			= 	Serializer.hpp \
+				Data.hpp
 
 SRCS		= 	main.cpp \
-				ScalarConverter.cpp \
+				Serializer.cpp
+
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 

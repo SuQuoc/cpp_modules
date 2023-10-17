@@ -1,15 +1,22 @@
-NAME		= convert
+NAME		= identify
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -Wconversion -MMD -MP -std=c++98 -pedantic -g
+CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj
 
-HDR			= 	ScalarConverter.hpp \
+HDR			= 	Base.hpp \
+				A.hpp \
+				B.hpp \
+				C.hpp
+
 
 SRCS		= 	main.cpp \
-				ScalarConverter.cpp \
+				Base.cpp \
+				A.cpp \
+				B.cpp \
+				C.cpp
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
