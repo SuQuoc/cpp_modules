@@ -32,7 +32,6 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(HDR)
 #General________________________________________________________
 clean:
 	rm -rf $(OBJ_PATH)
-	rm -rf Backyard
 	@echo "$(MAGENTA)Obj directory removed.$(NC)"
 
 fclean: clean

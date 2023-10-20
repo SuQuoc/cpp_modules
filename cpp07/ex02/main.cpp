@@ -5,6 +5,29 @@
 
 #define LINE    std::cout << "---------------------------" << std::endl;
 
+class Awesome
+{
+  public:
+    Awesome( void ) : _n( 42 ) { return; }
+    int get( void ) const { return this->_n; }
+  private:
+    int _n;
+};
+
+std::ostream & operator<<( std::ostream & o, Awesome const & rhs )
+{
+  o << rhs.get();
+  return o;
+}
+
+template< typename T >
+void print( T& x )
+{
+  std::cout << x << std::endl;
+  return;
+}
+
+
 void testFrameWork(void (*funcPTR)())
 {
 	if (funcPTR == NULL)
@@ -21,7 +44,6 @@ void testFrameWork(void (*funcPTR)())
 
 void deepCopyTest()
 {
-	
 	unsigned int n = 5;
 
 	Array<int> arr1(n);
@@ -29,8 +51,6 @@ void deepCopyTest()
 	arr1.setAllTo(10);
 	arr1[0] = 1;
 	arr1.print();
-	//print_arr<int>(arr1, n);
-	//set numbers and print_arr<int>(arr1, n);
 	LINE;
 
 	Array<int> arr2(arr1);
@@ -43,7 +63,6 @@ void deepCopyTest()
 	arr3.setAllTo(3);	
 	arr3 = arr2;
 	arr3[0] = 3;
-	
 	arr2.print();
 	arr3.print();
 }
@@ -51,7 +70,6 @@ void deepCopyTest()
 void emptyArrTest()
 {
 	Array<int> arr;
-
 	std::cout << arr[0] << std::endl;
 }
 
@@ -69,9 +87,10 @@ void sizeTest()
 }
 
 
+
 void differentArrTypes(std::string requestedType)
 {
-	std::string dataTypes[] = {"string", "char", "int", "float"};
+	std::string dataTypes[] = {"string", "custom", "int", "float"};
 	int index;
 
 	for (unsigned long i = 0; i < dataTypes->size(); i++)
@@ -80,7 +99,7 @@ void differentArrTypes(std::string requestedType)
 			index = static_cast<int>(i);
 	}
 	Array<std::string> arr(10);
-	Array<char> arr1(10);
+	Array<Awesome> arr1(10);
 	Array<int> arr2(10);
 	Array<float> arr3(10);
 	switch (index)
@@ -90,7 +109,6 @@ void differentArrTypes(std::string requestedType)
 			arr.print();
 			break;
 		case 1:
-			arr1.setAllTo('a');
 			arr1.print();
 			break;
 		case 2:

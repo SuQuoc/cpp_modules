@@ -46,7 +46,8 @@ void times2byAdding(Type& number)
 	number = number + number;
 }
 
-
+/* I dont like this version since u have to explicitly specifiy the type <> in order for it to work.
+Hmm more save? -> maybe not so bad? */
 template<typename Type>
 void iter(Type *arr, size_t len, void (*func)(Type&))
 {
@@ -54,3 +55,20 @@ void iter(Type *arr, size_t len, void (*func)(Type&))
 		func(arr[i]);
 }
 
+template<typename Type>
+void iter(Type *arr, size_t len, void (*func)(const Type&))
+{
+	for (size_t i = 0; i < len; i++)
+		func(arr[i]);
+}
+
+
+/* I dont like this version either since u can pass anything as F not only function pointers
+	+ u also have to specify the type with <>
+ */
+// template<typename Type, typename F>
+// void iter(Type *arr, size_t len, F func)
+// {
+	// for (size_t i = 0; i < len; i++)
+		// func(arr[i]);
+// }

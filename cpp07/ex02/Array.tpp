@@ -8,14 +8,6 @@ void printMessage(std::ostream& output, const std::string& msg, const std::strin
 	output << color << msg << RESET << std::endl;
 }
 
-
-template<typename T>
-Array<T>::Array(): _size(0)
-{
-	printMessage(std::cout, "Default constructor", GREEN);
-	data = new T[0]();
-}
-
 template<typename T>
 Array<T>::~Array()
 {
