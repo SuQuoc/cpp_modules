@@ -10,12 +10,10 @@ void printMessage(std::ostream& output, const std::string& msg, const std::strin
 
 
 template<typename T>
-Array<T>::Array(): _size(1)
+Array<T>::Array(): _size(0)
 {
 	printMessage(std::cout, "Default constructor", GREEN);
-	data = new T();
-	data[0] = T();
-
+	data = new T[0]();
 }
 
 template<typename T>
@@ -74,14 +72,6 @@ template<typename T>
 void Array<T>::print() const
 {
 	print_arr(data, _size);
-}
-
-template<typename T>
-void Array<T>::setAtTo(int index, const T& value)
-{
-	if (index < 0 || index >= this->_size)
-		throw std::out_of_range("Index out of bounds");
-	this->data[index] = value; 
 }
 
 template<typename T>

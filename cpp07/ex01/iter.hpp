@@ -40,11 +40,17 @@ void times2(Type& number)
 {
 	number = number * 2;
 }
+template<typename Type>
+void times2byAdding(Type& number)
+{
+	number = number + number;
+}
+
 
 template<typename Type>
-void iter(Type *arr, int len, void (*func)(Type&))
+void iter(Type *arr, size_t len, void (*func)(Type&))
 {
-	for (int i = 0; i < len; i++)
+	for (size_t i = 0; i < len; i++)
 		func(arr[i]);
 }
 

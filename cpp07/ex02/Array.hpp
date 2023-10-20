@@ -25,7 +25,20 @@ void print_arr(const Type *arr, int len)
 	out << "}" << std::endl;
 	std::cout << out.str();
 }
-
+// template<typename Type>
+// void create(const Type *arr, int len)
+// {
+	// std::ostringstream out;
+	// out << "your arr = {" ;
+	// for (int i = 0; i < len; i++)
+	// {
+		// out << arr[i];
+		// if (i != len - 1)
+		 	// out << ", ";
+	// }
+	// out << "}" << std::endl;
+	// std::cout << out.str();
+// }
 
 template<typename T>
 class Array
@@ -44,7 +57,6 @@ public:
 	int size() const; 
 
 	void print() const;
-	void setAtTo(int index, const T&);
 	void setAllTo(const T&);
 
 };
