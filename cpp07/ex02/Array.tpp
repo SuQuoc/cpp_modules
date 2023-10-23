@@ -1,7 +1,6 @@
 
 # include "Array.hpp"
 
-
 //utils for ________________________________________
 void printMessage(std::ostream& output, const std::string& msg, const std::string& color)
 {
@@ -16,13 +15,12 @@ Array<T>::~Array()
 }
 
 template<typename T>
-Array<T>::Array(const Array& src)
+Array<T>::Array(const Array& src): _size(src._size), data(new T[_size]())
 {
 	printMessage(std::cout, "Copy constructor", BLUE);
-	this->data = new T[src.size()]();	
-	*this = src;
+	for (int i = 0; i < this->_size; i++)
+		this->data[i] = src.data[i];
 }
-
 
 template<typename T>
 Array<T>& Array<T>::operator = (const Array& rhs)
@@ -30,7 +28,9 @@ Array<T>& Array<T>::operator = (const Array& rhs)
 	printMessage(std::cout, "Copy assignment operator", BLUE);
 	if (this == &rhs)
 		return *this;
-	this->_size = rhs.size();	
+	this->_size = rhs.size();
+	delete [] data;
+	data = new T[this->_size]();
 	for (int i = 0; i < this->_size; i++)
 		this->data[i] = rhs.data[i];
 	return *this; 

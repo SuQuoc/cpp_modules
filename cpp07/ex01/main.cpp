@@ -25,6 +25,13 @@ void print( T& x )
   std::cout << x << std::endl;
   return;
 } 
+template< typename T >
+void print2(const T& x )
+{
+  std::cout << x << std::endl;
+  return;
+} 
+
 
 void toUpper(std::string& str)
 {
@@ -51,8 +58,13 @@ int main( void )
 	::print_arr<std::string>(str_arr, 3);
 	LINE;
 	std::string str_arr2[3] = {"This is", "an", "array of strings"};
-	::print_arr<std::string>(str_arr, 3);
-	::iter<std::string>(str_arr, 3, ::times2byAdding<std::string>);
-	::print_arr<std::string>(str_arr, 3);
+	::print_arr<std::string>(str_arr2, 3);
+	::iter<std::string>(str_arr2, 3, ::times2byAdding<std::string>);
+	::print_arr<std::string>(str_arr2, 3);
 	LINE;
+	// std::string str_arr3[3] = {"This is", "an", "array of strings"};
+	// ::print_arr<std::string>(str_arr3, 3);
+	// ::iter<std::string>(str_arr3, 3, ::print2<const std::string>);
+	// ::print_arr<std::string>(str_arr3, 3);
+	// LINE;
 }

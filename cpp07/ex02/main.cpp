@@ -55,14 +55,14 @@ void deepCopyTest()
 
 	Array<int> arr2(arr1);
 	arr2[0] = 2;
-	arr2.print();
 	arr1.print();
+	arr2.print();
 	LINE;
 
-	Array<int> arr3(n);
+	Array<int> arr3(n - 2);
 	arr3.setAllTo(3);	
+	arr3.print();
 	arr3 = arr2;
-	arr3[0] = 3;
 	arr2.print();
 	arr3.print();
 }
@@ -91,7 +91,7 @@ void sizeTest()
 void differentArrTypes(std::string requestedType)
 {
 	std::string dataTypes[] = {"string", "custom", "int", "float"};
-	int index;
+	int index = -1;
 
 	for (unsigned long i = 0; i < dataTypes->size(); i++)
 	{
@@ -122,8 +122,8 @@ void differentArrTypes(std::string requestedType)
 		default:
 			printMessage(std::cout, "Not supported data type", RED);
 	}
-
 }
+
 #define MAX_VAL 5
 int subject(int, char**)
 {
