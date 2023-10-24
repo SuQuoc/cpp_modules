@@ -6,13 +6,16 @@ CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
 SRC_PATH 	= .
 OBJ_PATH 	= obj
  
-HDR			= 	easyfind.hpp \
+HDR			= 	Span.hpp \
+				Tests.hpp
 
-SRCS		= 	main.cpp 
+SRCS		= 	main.cpp \
+				Span.cpp \
+				tests.cpp
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
-.PHONY: all clean fclean re run va
+.PHONY: all clean fclean re run va scan
 
 #Build________________________________________________________
 all: $(OBJ_PATH) $(NAME)
@@ -48,6 +51,10 @@ va: all
 	valgrind \
 	--leak-check=full \
 	--show-leak-kinds=all \
+	./$(NAME)
+
+scan: all
+	scan-build-12 \
 	./$(NAME)
 
 #COLORS_____________________________________________________________
