@@ -51,6 +51,7 @@
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
 		"list": "cpp",
-		"*.tpp": "c"
+		"*.tpp": "c",
+		"set": "cpp"
 	}
 }

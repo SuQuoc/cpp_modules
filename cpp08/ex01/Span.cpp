@@ -1,8 +1,6 @@
 
 # include "Span.hpp"
 
-
-
 Span::Span (void){}
 
 Span::Span (const Span& src)
@@ -30,47 +28,50 @@ Span::Span(unsigned int N): _capacity(N)
 {	
 }
 
-void Span::addManyNumbers(size_t amount, size_t value)
-{
-	if (amount > _capacity - _numbers.size())
-		throw std::out_of_range("(addManyNumbers) Cant add values to Span, not enough space!");
-	// new impl with another data type
-	std::vector<int>::iterator pos = _numbers.end();
-	_numbers.insert(pos, amount, value);
-}
+
 
 
 void Span::addNumber(int num)
 {
-	// std::cout << "Current size: " << _numbers.size() << "Capacity" <<_capacity << std::endl;
 	if (_numbers.size() == _capacity)
 		throw std::out_of_range("(addNumber) Cant add value to Span, max Span size reached!");
-	_numbers.push_back(num);
+	_numbers.insert(num);
 }
 
-int Span::longestSpan() const
+size_t Span::longestSpan() const
 {
 	if (_numbers.size() < 2)
 		throw std::length_error("(longestSpan) At least 2 values in Span needed for this operation");
-	std::vector<int>::const_iterator max_it = std::max_element(_numbers.begin(), _numbers.end());
-	std::vector<int>::const_iterator min_it = std::min_element(_numbers.begin(), _numbers.end());
-
-	return (std::abs(*max_it - *min_it));
+	std::multiset<int>::const_iterator max_it = std::max_element(_numbers.begin(), _numbers.end());
+	std::multiset<int>::const_iterator min_it = std::min_element(_numbers.begin(), _numbers.end());
+	// if (static_cast<size_t>(*max_it + abs(*min_it)) > std::numeric_limits<int>::max())
+		// throw std::overflow_error("(longestSpan) Distance over max int, therefore overflowed");
+	
+	// if (*max_it > 0 && *min_it < 0)
+		// return (*max_it - *min_it);
+	// else
+	return (static_cast<size_t>(*max_it) - static_cast<size_t>(*min_it));
 }
 
-int Span::shortestSpan() const
+size_t Span::shortestSpan() const
 {
 	if (_numbers.size() < 2)
 		throw std::length_error("(shortestSpan) At least 2 values in Span needed for this operation");
 	
-	int shortest_span = std::numeric_limits<int>::max();
+	long shortest_span = std::numeric_limits<long>::max();	
+	
 
-	for (std::vector<int>::const_iterator it = _numbers.begin(); it != _numbers.end(); it++)
-	{
-		for (std::vector<int>::const_iterator it2 = it + 1; it2 != _numbers.end(); it2++)
-			shortest_span = std::min(shortest_span, std::abs(*it - *it2));
-	}
-	return (shortest_span);
+	// for (std::multiset<int>::const_iterator it = _numbers.begin(); it != _numbers.end(); it++)
+	// {
+		// for (std::multiset<int>::const_iterator it2 = it + 1; it2 != _numbers.end(); it2++)
+		// {
+			// shortest_span = std::min(shortest_span, 
+			// std::abs(static_cast<long>(*it) - static_cast<long>(*it2)));
+			// if (shortest_span == 0)
+				// return (0);
+		// }
+	// }
+	return (static_cast<size_t>(shortest_span));
 }
 
 void Span::printSpan() const

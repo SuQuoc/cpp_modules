@@ -8,8 +8,8 @@ int main(int argc, char **argv)
 	if (argc != 2)
 		return 1;
 	char choice = argv[1][0];
-	std::vector<int> data(1000);
-	printContainer(data);
+	// std::vector<int> data(1000);
+	// printContainer(data);
 	
 	// int data[1000];
 	// for (int i = 0; i < 1000; i++)
@@ -29,9 +29,11 @@ int main(int argc, char **argv)
 		case '1':
 			testFrameWork(over10K);
 			break;
-
 		case 'n':
 			testFrameWork(negativeValues);
+			break;
+		case 'o':
+			testFrameWork(overIntMax);
 			break;
 		default:
 			std::cout << "No test available." << std::endl;

@@ -49,15 +49,19 @@ void times2byAdding(Type& number)
 /* I dont like this version since u have to explicitly specifiy the type <> in order for it to work.
 Hmm more save? -> maybe not so bad? */
 template<typename Type>
-void iter(Type *arr, size_t len, void (*func)(Type&))
+void iter(Type *arr, const size_t len, void (*func)(Type&))
 {
+	if (!arr)
+		std::cerr << "Invalid arr!" << std::endl;
 	for (size_t i = 0; i < len; i++)
 		func(arr[i]);
 }
 
 template<typename Type>
-void iter(Type *arr, size_t len, void (*func)(const Type&))
+void iter(Type *arr, const size_t len, void (*func)(const Type&))
 {
+	if (!arr)
+		std::cerr << "Invalid arr!" << std::endl;
 	for (size_t i = 0; i < len; i++)
 		func(arr[i]);
 }

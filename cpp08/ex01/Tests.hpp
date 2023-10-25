@@ -7,6 +7,10 @@
 # include <algorithm>
 # include <limits>
 
+# include "Span.hpp"
+
+# define TEST_SIZE 100000
+
 template <typename T>
 void printContainer(T& container)
 {
@@ -28,4 +32,5 @@ void sizeZero_One_Two(void);
 void addManyNum(void);
 void over10K(void);
 void negativeValues(void);
+void overIntMax(void);
 
