@@ -30,12 +30,12 @@ void subject(void)
 	sp.addNumber(3);
 	sp.addNumber(17);
 	sp.addNumber(9);
-	sp.addNumber(2);
-	sp.addNumber(2);
+	sp.addNumber(200);
 
+	std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
+	std::cout << "longest span: " << sp.longestSpan() << std::endl;
 
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.longestSpan() << std::endl;
+	sp.printSpan();
 }
 
 void rangeTest(void)
@@ -55,52 +55,47 @@ void sizeZero_One_Two(void)
 	sp.addNumber(1);
 	sp.addNumber(10);
 
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.longestSpan() << std::endl;
+	std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
+	std::cout << "longest span: " << sp.longestSpan() << std::endl;
+
 }
 
 void addManyNum(void)
 {
-	Span sp(TEST_SIZE);
-	std::vector<int> contain;
-	for (int i = 0; i < TEST_SIZE; i++)
-		contain.push_back(i);
+	int len = 10;
+	Span sp(len);
+	std::vector<int> container;
+	// std::list<int> container;
 
-	sp.addManyNumbers<>(100, 200);
+	srand(time(NULL));
+    for (int i = 0; i < len; ++i) {
+        int randomValue = rand() % 100;
+        container.push_back(randomValue);
+    }
+
+	sp.addManyNumbers(container.begin(), container.end());
+	// sp.addManyNumbers<std::vector<int>::iterator>(container.begin(), container.begin() + 7);
+	
 	std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
 	std::cout << "longest span: " << sp.longestSpan() << std::endl;
-
-	// sp.printSpan();
-	// sp.addManyNumbers(2, 4);
-	// sp.printSpan();
+	sp.printSpan();
 }
 
 
 void over10K(void)
 {
-	// int arr[100000];
-	// for (int i = 0; i < 10; i++)
-		// std::cout << arr[i] << std::endl;
+	Span sp(TEST_SIZE);
+	std::vector<int> container;
 
-	Span sp(100000);
+	srand(static_cast<unsigned>(time(0)));
+    for (int i = 0; i < TEST_SIZE; ++i) {
+        int randomValue = rand() % 100;
+        container.push_back(randomValue);
+    }
 
-	// sp.addManyNumbers(arr, arr + 100000);
-	sp.printSpan();
+	sp.addManyNumbers<std::vector<int>::iterator>(container.begin(), container.end());
 	std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
 	std::cout << "longest span: " << sp.longestSpan() << std::endl;
-
-
-	// Span sp(1000000);
-	// sp.addManyNumbers(10000, 1);
-	// sp.addManyNumbers(10000, 4);
-	// sp.addManyNumbers(10000, 8);
-	// sp.addManyNumbers(10000, 12);
-	// sp.addManyNumbers(10000, 20);
-	// sp.addManyNumbers(10000, 50);
-	// sp.addManyNumbers(10000, 100);
-// 
-	// std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
-	// std::cout << "longest span: " << sp.longestSpan() << std::endl;
 }
 
 void negativeValues(void)
@@ -108,10 +103,10 @@ void negativeValues(void)
 	Span sp(100000);
 	sp.addNumber(100);
 	sp.addNumber(-20);
-	// sp.addNumber(-10);
-	// sp.addNumber(20);
-	// sp.addNumber(-70);
-	// sp.addNumber(40);
+	sp.addNumber(-10);
+	sp.addNumber(20);
+	sp.addNumber(-70);
+	sp.addNumber(40);
 
 	std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
 	std::cout << "longest span: " << sp.longestSpan() << std::endl;

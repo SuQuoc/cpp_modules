@@ -4,12 +4,13 @@
 # include <iostream>
 # include <sstream>
 # include <vector>
+# include <list>
 # include <algorithm>
 # include <limits>
 
 # include "Span.hpp"
 
-# define TEST_SIZE 100000
+# define TEST_SIZE 1000000
 
 template <typename T>
 void printContainer(T& container)
@@ -33,4 +34,6 @@ void addManyNum(void);
 void over10K(void);
 void negativeValues(void);
 void overIntMax(void);
+void subject(void);
+
 

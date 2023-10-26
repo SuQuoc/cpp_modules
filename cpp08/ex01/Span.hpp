@@ -7,6 +7,7 @@
 # include <set>
 # include <algorithm>
 # include <limits>
+# include <iterator>
 
 # include "Tests.hpp"
 
@@ -14,7 +15,7 @@ class Span
 {
 private:
 	Span();
-	std::multiset<int> _numbers;
+	std::vector<int> _numbers;
 	unsigned int _capacity;
 
 public:
@@ -24,25 +25,23 @@ public:
 	Span& operator = (const Span& src);
 
 	void addNumber(int num);
-	template<typename T>
-	void addManyNumbers(T first, T last);
+	template<typename InputIt>
+	void addManyNumbers(InputIt first,InputIt last);
+
 	void printSpan() const ;
-	size_t shortestSpan() const ;
+	size_t shortestSpan() ;
 	size_t longestSpan() const;
 };
 
 
-template<typename T>
-void Span::addManyNumbers(T first, T last)
+template<typename InputIt>
+void Span::addManyNumbers(InputIt first,InputIt last)
 {
 	size_t amount = std::distance(first, last);
-	std::cout << amount << std::endl;
+	std::cout << "amount: " << amount << std::endl;
 	if (amount > _capacity - _numbers.size())
 		throw std::out_of_range("(addManyNumbers) Cant add values to Span, not enough space!");
-	_numbers.insert(first, last);
-	int a = last - first;
-
-	std::cout << "HALLO" << a << std::endl;
+	_numbers.insert(_numbers.end(), first, last);
 }
 
 

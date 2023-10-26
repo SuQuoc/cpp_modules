@@ -8,15 +8,11 @@ int main(int argc, char **argv)
 	if (argc != 2)
 		return 1;
 	char choice = argv[1][0];
-	// std::vector<int> data(1000);
-	// printContainer(data);
-	
-	// int data[1000];
-	// for (int i = 0; i < 1000; i++)
-		// std::cout << data[i] << std::endl;
-	
 	switch (choice)
 	{
+		case 's':
+			testFrameWork(subject);
+			break;
 		case '0':
 			testFrameWork(sizeZero_One_Two);
 			break;
