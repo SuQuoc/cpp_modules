@@ -1,12 +1,16 @@
 
-// # include "MutantStack.hpp"
 # include <stack>
 # include <iterator>
 # include <iostream>
+# include <cstdlib>
+# include <string>
 # include <algorithm>
 # include <vector>
+# include <iomanip> // Include the iomanip header for setw
 
+# include "MutantStack.hpp"
 # include "helper.hpp"
+
 
 
 
@@ -46,40 +50,74 @@ void memberFunctions()
 	words.push_back("words");
 	
 	std::stack<std::string> stackA;
-	// MutantStack<std::string> fakerA;
+	MutantStack<std::string> fakerA;
 
+	LINE;
+	std::cout << "      " << std::left << std::setw(11) << "Stack";
+	std::cout << std::setw(20) << "| MutantStack" << std::endl;
+	LINE;
 	for (std::vector<std::string>::iterator it = words.begin(); it != words.end(); it++)
 	{
 		stackA.push(*it);
-		//fakeA.push(*it);
-		std::cout << "Top: " << stackA.top() << std::endl;
+		fakerA.push(*it);
+		std::cout << std::left << std::setw(7) << "Top:" << std::setw(10) << stackA.top();
+		std::cout << std::setw(5) << "|" << fakerA.top() << std::endl;
 	}
 	LINE;
-	std::cout << "Size stack: " << stackA.size() << std::endl;
-	// std::cout << "Size faker: " << fakerA.size() << std::endl;
+	std::cout << std::left << std::setw(7) << "Size:" << std::setw(10) << stackA.size();
+	std::cout << std::setw(5) << "|" <<fakerA.size() << std::endl;
 	LINE;
 	for (std::vector<std::string>::iterator it = words.begin(); it != words.end(); it++)
 	{
-		std::cout << "Top: " << stackA.top() << std::endl; //segv instead of throwing exception??
+		std::cout << std::left << std::setw(7) << "Top:" << std::setw(10) << stackA.top();
+		std::cout << std::setw(5) << "|" << fakerA.top() << std::endl;
 		stackA.pop();
-		//fakeA.pop();
+		fakerA.pop();
 	}
 	LINE;
-	std::cout << "Size stack: " << stackA.size() << std::endl;
-	// std::cout << "Size faker: " << fakerA.size() << std::endl;
+	std::cout << std::left << std::setw(7) << "Size:" << std::setw(10) << stackA.size();
+	std::cout << std::setw(5) << "|" <<fakerA.size() << std::endl;
 }
 
-
+void subject()
+{
+	MutantStack<int> mstack;
+	mstack.push(5);
+	mstack.push(17);
+	std::cout << mstack.top() << std::endl;
+	mstack.pop();
+	std::cout << mstack.size() << std::endl;
+	mstack.push(3);
+	mstack.push(5);
+	mstack.push(737);
+	//[...]
+	mstack.push(0);
+	MutantStack<int>::iterator it = mstack.begin();
+	MutantStack<int>::iterator ite = mstack.end();
+	++it;
+	--it;
+	while (it != ite)
+	{
+	std::cout << *it << std::endl;
+	++it;
+	}
+	std::stack<int> s(mstack);
+}
 
 int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return 1;
 	char choice = argv[1][0];
+
+
 	switch (choice)
 	{
 		case 'm':
 			testFrameWork(memberFunctions);
+			break;
+		case 's':
+			testFrameWork(subject);
 			break;
 		default :
 			std::cout << "No test available." << std::endl;

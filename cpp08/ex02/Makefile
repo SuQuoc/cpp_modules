@@ -6,7 +6,7 @@ CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
 SRC_PATH 	= .
 OBJ_PATH 	= obj
  
-HDR			= 	helper.hpp
+HDR			= 	helper.hpp \
 
 SRCS		= 	main.cpp \
 

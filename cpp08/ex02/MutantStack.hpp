@@ -4,64 +4,53 @@
 # include <stack>
 # include <iterator>
 # include <iostream>
+# include <vector>
+# include <deque>
 # include <algorithm>
 
 
-class StackIterator;
 
-template <typename T>
-class MutantStack
+template <typename T, typename container = std::deque<T> >
+class MutantStack: public std::stack<T>
 {
-private:
-	size_t _stackSize;
-	T _fakeStack[];
-	class Iterator
-	{
-		private:
-			size_t _n = -1; //forbidden?
-		public:
-			Iterator();
-			~Iterator();
-			Iterator(const Iterator& src) = delete;
-			Iterator& operator = (const Iterator& src) = delete;
-
-			bool hasNext() const ;
-			T next(); //eventuell T* 
-	};
-
-	StackIterator _iterator;
 public:
-	MutantStack();
-	~MutantStack();
-	MutantStack(const MutantStack& src);
-	MutantStack& operator = (const MutantStack& src);
+		typedef typename container::iterator iterator;
+private:
 
-	T iterator();
+public:
+		MutantStack() {};
+		~MutantStack() {};
+		MutantStack(const MutantStack& src);
+		MutantStack& operator=(const MutantStack& src);
+
+		iterator begin();
+		iterator end();
+
 };
 
-
-template <typename T>
-MutantStack<T>::Iterator::Iterator(): _n(_i) {};
-
-
-template <typename T>
-bool MutantStack<T>::Iterator::hasNext() const 
+template <typename T, typename container>
+MutantStack<T, container>::MutantStack(const MutantStack& src)
 {
-	return (_n >= 0);
+	*this = src;
 }
 
-template <typename T>
-T MutantStack<T>::Iterator::next()
+
+template <typename T, typename container>
+MutantStack<T, container>& MutantStack<T, container>::operator=(const MutantStack& src)
 {
-	if (!this->hasNext())
-		throw std::range_error("(Iterator) No next member");
-	_n--;
-	return (_fakeStack[_n + 1])
+	std::stack<T, container>::operator=(src); 
+	return (*this);
 }
 
-template <typename T>
 
-T MutantStack<T>::iterator()
+template <typename T, typename container>
+typename MutantStack<T, container>::iterator MutantStack<T, container>::begin()
 {
-	new MutantStack::Iterator(); 
+	return this->c.begin();
+}
+
+template <typename T, typename container>
+typename MutantStack<T, container>::iterator MutantStack<T, container>::end()
+{
+	return this->c.end();
 }
