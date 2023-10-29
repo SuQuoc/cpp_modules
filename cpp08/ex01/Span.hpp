@@ -38,7 +38,6 @@ template<typename InputIt>
 void Span::addManyNumbers(InputIt first,InputIt last)
 {
 	size_t amount = std::distance(first, last);
-	std::cout << "amount: " << amount << std::endl;
 	if (amount > _capacity - _numbers.size())
 		throw std::out_of_range("(addManyNumbers) Cant add values to Span, not enough space!");
 	_numbers.insert(_numbers.end(), first, last);

@@ -7,8 +7,9 @@ SRC_PATH 	= .
 OBJ_PATH 	= obj
  
 HDR			= 	helper.hpp \
+				MutantStack.hpp
 
-SRCS		= 	main.cpp \
+SRCS		= 	main.cpp
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 

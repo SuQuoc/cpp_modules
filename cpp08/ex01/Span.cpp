@@ -27,8 +27,6 @@ Span::Span(unsigned int N): _capacity(N)
 {	
 }
 
-
-
 //member functions____________________________________________________
 void Span::addNumber(int num)
 {

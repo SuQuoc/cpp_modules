@@ -6,9 +6,6 @@
 
 # include "easyfind.hpp"
 
-
-
-
 void testFrameWork(void (*funcPTR)())
 {
 	if (funcPTR == NULL)
@@ -23,12 +20,9 @@ void testFrameWork(void (*funcPTR)())
 	}
 }
 
-
-
-
-void vectorTestString()
+//should not work
+/* void vectorTestString()
 {
-	int n = 10;
 	std::vector<std::string> Vect;
 	Vect.push_back("a");
     Vect.push_back("ab");
@@ -38,12 +32,12 @@ void vectorTestString()
 	const std::vector<std::string> constVector = Vect;
 	
 	printContainer(Vect);
-	// printContainer(constVector);
+	printContainer(constVector);
 
-	std::cout << "Testing easyfind, searching for " << n << ": " << *easyfind(Vect, n) << std::endl;
+	std::cout << "Testing easyfind, searching for a" << ": " << *easyfind(Vect, 'a') << std::endl;
 	// std::cout << "Testing easyfind, searching for " << n << ": " << *easyfind(constVector, n) << std::endl;
 	// std::cout << "Testing easyfind, searching for " << n << ": " << *easyfind(Vect, n) << std::endl;
-}
+} */
 
 int main()
 {	
@@ -58,5 +52,5 @@ int main()
 	containerTest<std::list<float>, float>(fList, 1.0f);
 	containerTest<std::list<double>, double>(dList, 1.0);
 
-	vectorTestString();
+	// vectorTestString();
 }

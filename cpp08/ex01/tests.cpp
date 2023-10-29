@@ -52,7 +52,7 @@ void rangeTest(void)
 void sizeZero_One_Two(void)
 {
 	Span sp = Span(2);
-	sp.addNumber(1);
+	sp.addNumber(1); //delete this for the test
 	sp.addNumber(10);
 
 	std::cout << "shortest span: " << sp.shortestSpan() << std::endl;
@@ -67,7 +67,7 @@ void addManyNum(void)
 	std::vector<int> container;
 	// std::list<int> container;
 
-	srand(time(NULL));
+	srand(static_cast<unsigned>(time(NULL)));
     for (int i = 0; i < len; ++i) {
         int randomValue = rand() % 100;
         container.push_back(randomValue);
@@ -88,9 +88,11 @@ void over10K(void)
 	std::vector<int> container;
 
 	srand(static_cast<unsigned>(time(0)));
-    for (int i = 0; i < TEST_SIZE; ++i) {
-        int randomValue = rand() % 100;
-        container.push_back(randomValue);
+    for (int i = 0; i < TEST_SIZE ; ++i) 
+	{
+        int randomValue = rand() % TEST_SIZE;
+        // int randomValue = i * 2;
+		container.push_back(randomValue);
     }
 
 	sp.addManyNumbers<std::vector<int>::iterator>(container.begin(), container.end());
