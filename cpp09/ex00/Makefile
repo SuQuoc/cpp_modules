@@ -1,7 +1,7 @@
 NAME		= btc
 
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
+CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -g
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj

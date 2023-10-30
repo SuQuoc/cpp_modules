@@ -8,9 +8,14 @@
 # include <fstream>
 # include <string>
 # include <map>
+# include <ctime>
+# include <limits>
+# include <iomanip>
 
-# define CSV_HEADER		"date,exchange_rate"
-# define INPUT_HEADER 	"date | value"
+# define CSV_HEADER			"date,exchange_rate"
+# define INPUT_HEADER 		"date | value"
+# define INPUT_FILE_DELIM 	'|'
+# define CSV_DELIM 			','
 
 class BitcoinExchange
 {
