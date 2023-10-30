@@ -52,6 +52,7 @@
 		"typeinfo": "cpp",
 		"list": "cpp",
 		"*.tpp": "c",
-		"set": "cpp"
+		"set": "cpp",
+		"map": "cpp"
 	}
 }
