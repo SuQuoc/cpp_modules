@@ -1,6 +1,23 @@
 
 # include "BitcoinExchange.hpp"
 
+std::pair<std::string, std::string> splitString(const std::string& str, char delimiter) 
+{
+    size_t pos = str.find(delimiter);
+
+    if (pos == std::string::npos) 
+	{
+        // Delimiter not found, so the entire string is the first part.
+        return std::make_pair(str, "");
+    }
+
+    std::string firstPart = str.substr(0, pos);
+    std::string secondPart = str.substr(pos + 1);
+
+    return std::make_pair(firstPart, secondPart);
+}
+
+
 BitcoinExchange::BitcoinExchange() {}
 BitcoinExchange::~BitcoinExchange() {}
 
@@ -10,43 +27,52 @@ void getCSVData(std::ifstream& file, std::string& date, double& rate, char delim
 {
 	std::istringstream iss;
 	std::string temp;
-
 	getline(file, date, delim);
 	getline(file, temp, '\n');
 	iss.str(temp);
 	iss >> rate;
 	if (iss.fail())
 	{
-		//2001-42-42 
-		//
-		std::cout << "Error: Invalid number" << std::endl; 
+		std::cout << "Error: Invalid number in CSV file" << std::endl; 
 		iss.clear();
 		return ;
 	}
 	iss.clear();
 }
 
-void getInputData(std::ifstream& file, std::string& date, double& rate, char delim)
+int getInputData(std::ifstream& file, std::string& date, double& rate, char delim)
 {
 	std::istringstream iss;
-	std::string temp;
+	std::string line;
+	std::pair<std::string, std::string> dateValuePair;
 
-	getline(file, date, delim);
-	getline(file, temp, '\n');
-	iss.str(temp);
-	iss >> rate;
-	if (iss.fail())
+	getline(file, line, '\n');
+	dateValuePair = splitString(line, delim);
+	if (dateValuePair.second.empty())
 	{
-		//2001-42-42 
-		//
-		std::cout << "Error: Invalid number" << std::endl; 
+		std::cout << "Error: no delimiter found" << std::endl; 
+		return 1;
+	}
+	if (dateValuePair.first.back() != ' ' || dateValuePair.second.front() != ' ')
+	{
+		std::cout << "Error: incorrect format (date | value)" << std::endl; 
+		return 1;
+	}
+	dateValuePair.first.pop_back(); //removing the whitespace
+	date = dateValuePair.first;
+	iss.str(dateValuePair.second);
+	iss >> rate;
+	if (iss.fail() || !iss.eof())
+	{
+		std::cout << "Error: invalid number (number must end with a digit, be aware of whitespaces)" << std::endl; 
 		iss.clear();
-		return ;
+		return 1;
 	}
 	iss.clear();
+	return 0;
 }
 
-// what happens with dupolicate dates? --> not handled database wont be checked
+// what happens with dupolicate dates? --> not handled, database wont be checked
 // first occurence will be taken
 void BitcoinExchange::loadCSV_Database(const std::string& filename)
 {
@@ -60,7 +86,6 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 		std::cout << "Warning: btc database was overwritten" << std::endl;
 		clearMap(_exchangeRates);
 	}
-
 	file.open(filename.c_str());
 	if (!file.is_open())
 	{
@@ -76,7 +101,7 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 	}
 	while (file.good())
 	{
-		getData(file, date, rate, CSV_DELIM);
+		getCSVData(file, date, rate, CSV_DELIM);
 		_exchangeRates.insert(std::pair<std::string, double>(date, rate));
 	}
 	file.close();
@@ -85,38 +110,10 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 
 
 
-// doesnt check for leap years or days with 31 or 30 days or february
-bool isValidDateIHATECTIME(const std::string& dateString)
-{
-	// Date string must be exactly 10 characters long (YYYY-MM-DD).
-    if (dateString.length() != 11 || dateString[4] != '-' || dateString[7] != '-' || dateString[10] != ' ')
-	{
-        return (false);
-	}
-	std::tm Date = {};
-	Date.tm_year = atoi(dateString.substr(0, 4).c_str()) - 1900; //year since 1900, see c library
-	Date.tm_mon = atoi(dateString.substr(5, 2).c_str()) - 1; //month since january
-	Date.tm_mday = atoi(dateString.substr(8, 2).c_str());
-
-	std::cout << "Date: ";
-    std::cout << std::put_time(&Date, "%Y-%m-%d") << std::endl;
-	// std::cout << "year: " << Date.tm_year << "month: " << Date.tm_mon << "day: " << Date.tm_mday << std::endl;
-	
-
-	std::cout << "SHIT: " << std::asctime(&Date) << std::endl;
-
-	
-    // const std::tm time = std::mktime(&Date);
-
-	char buffer[80];
-	strftime(buffer, 80, "%Y-%m-%d ", &Date);
-    return (true);
-}
-
 bool isValidDate(const std::string& dateString) 
 {
-    // Date string must be exactly 10 characters long (YYYY-MM-DD).
-    if (dateString.length() != 11 || dateString[4] != '-' || dateString[7] != '-')
+    // Date string must be exactly 11 characters long (YYYY-MM-DD).
+    if (dateString.length() != 10 || dateString[4] != '-' || dateString[7] != '-')
 	{
 		std::cout << "SHIT: " << std::endl;
         return (false);
@@ -150,12 +147,37 @@ bool isValidDate(const std::string& dateString)
     }
 }
 
-void BitcoinExchange::calcBtcToValue(const std::string& filename) const
+void BitcoinExchange::calcBtcToValue(const std::string& date, double amount) const
+{
+	// if (_exchangeRates.empty())
+	// {
+		// std::cerr << "Error: database must not be empty before calculating btc values." << std::endl;
+		// return ;
+	// }	
+	std::map<std::string, double>::const_iterator it = _exchangeRates.lower_bound(date);
+	if (it == _exchangeRates.begin() && date != it->first)
+	{
+		std::cout << "Error: Btc was invented on 3. Januar 2009 (wikipedia), even database wrong?? ¯\\_(ツ)_/¯ " << std::endl;
+		return;
+	}
+	// if (date != it->first)
+		// it--;
+	// (void)amount;
+	std::cout << date << " => " << amount << " = " << amount * it->second << std::endl;
+}
+
+void BitcoinExchange::calcInputFile(const std::string& filename) const
 {	
 	std::ifstream file; 
 	std::string inputHeader;
 	std::string date;
-	double amount; 
+	double amount = 0; 
+
+	if (_exchangeRates.empty())
+	{
+		std::cerr << "Error: database must not be empty before calculating btc values." << std::endl;
+		return ;
+	}
 
 	file.open(filename.c_str());
 	if (!file.is_open())
@@ -172,9 +194,8 @@ void BitcoinExchange::calcBtcToValue(const std::string& filename) const
 	}
 	while (file.good())
 	{
-		getData(file, date, amount, INPUT_FILE_DELIM);
-		if (date.find('\n') != std::string::npos)
-			std::cout << "Error: invalid format" << std::endl;
+		if (getInputData(file, date, amount, INPUT_FILE_DELIM) == 1)
+			continue;
 		else if (!isValidDate(date))
 			std::cout << "Error: bad input => " << date << std::endl;
 		else if (amount < 0)
@@ -182,7 +203,7 @@ void BitcoinExchange::calcBtcToValue(const std::string& filename) const
 		else if (amount > std::numeric_limits<int>::max())
 			std::cout << "Error: too large a number" << std::endl;
 		else
-			std::cout << date << " => " << amount << " = " << "CALC VBALUE" << std::endl;
+			calcBtcToValue(date, amount);
 	}
 	file.close();
 }

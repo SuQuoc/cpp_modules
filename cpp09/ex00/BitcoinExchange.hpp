@@ -21,7 +21,8 @@ class BitcoinExchange
 {
 private:
 	std::map<std::string, double> _exchangeRates;
-
+	
+	void calcBtcToValue(const std::string& date, double amount) const;
 public:
 	BitcoinExchange();
 	~BitcoinExchange();
@@ -29,7 +30,7 @@ public:
 	BitcoinExchange& operator = (const BitcoinExchange& rhs);
 
 	void loadCSV_Database(const std::string& filename);
-	void calcBtcToValue(const std::string& filename) const;
+	void calcInputFile(const std::string& filename) const;
 };
 
 

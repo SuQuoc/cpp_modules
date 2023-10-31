@@ -1,5 +1,5 @@
 NAME		= btc
-
+ARGS		= input.txt
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -g
 
@@ -10,13 +10,12 @@ HDR			= 	helper.hpp \
 				BitcoinExchange.hpp
 
 SRCS		= 	main.cpp \
-				BitcoinExchange.cpp \
-				Error_handling.cpp
+				BitcoinExchange.cpp 
 
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
-.PHONY: all clean fclean re run va
+.PHONY: all clean fclean re run va scan
 
 #Build________________________________________________________
 all: $(OBJ_PATH) $(NAME)
@@ -46,13 +45,18 @@ re: fclean all
 
 #ADD ONS_______________________________________________________
 run: all
-	./$(NAME) input.txt
+	./$(NAME) $(ARGS)
 
 va: all
 	valgrind \
 	--leak-check=full \
+	--track-origins=yes \
 	--show-leak-kinds=all \
-	./$(NAME)
+	./$(NAME) $(ARGS)
+
+scan: all
+	scan-build-12 \
+	./$(NAME) $(ARGS)
 
 #COLORS_____________________________________________________________
 RED			=	\033[0;31m
