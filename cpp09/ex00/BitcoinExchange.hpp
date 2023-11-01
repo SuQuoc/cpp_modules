@@ -16,6 +16,8 @@
 # define INPUT_HEADER 		"date | value"
 # define INPUT_FILE_DELIM 	'|'
 # define CSV_DELIM 			','
+# define UPPER_LIM 			1000
+# define LOWER_LIM 			0
 
 class BitcoinExchange
 {

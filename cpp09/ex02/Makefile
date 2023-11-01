@@ -1,20 +1,20 @@
-NAME		= btc
-ARGS		= input.txt
+NAME		= PmergeMe
+ARGS		= 3 5 9 7 4
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -g
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj
  
-HDR			= 	BitcoinExchange.hpp
+HDR			= 	PmergeMe.hpp
 
 SRCS		= 	main.cpp \
-				BitcoinExchange.cpp 
+				PmergeMe.cpp 
 
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
-.PHONY: all clean fclean re run va scan
+.PHONY: all clean fclean re run va scan fun
 
 #Build________________________________________________________
 all: $(OBJ_PATH) $(NAME)
@@ -55,6 +55,10 @@ va: all
 
 scan: all
 	scan-build-12 \
+	./$(NAME) $(ARGS)
+
+fun: all
+	funcheck -a \
 	./$(NAME) $(ARGS)
 
 #COLORS_____________________________________________________________

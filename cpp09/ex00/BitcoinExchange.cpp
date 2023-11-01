@@ -21,7 +21,19 @@ std::pair<std::string, std::string> splitString(const std::string& str, char del
 BitcoinExchange::BitcoinExchange() {}
 BitcoinExchange::~BitcoinExchange() {}
 
-
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& src)
+{
+	if (this == &src)
+		return ;
+	*this = src;
+}
+BitcoinExchange& BitcoinExchange::operator = (const BitcoinExchange& rhs)
+{
+	if (this == &rhs)
+		return *this;
+	_exchangeRates = rhs._exchangeRates;
+	return *this;
+}
 
 void getCSVData(std::ifstream& file, std::string& date, double& rate, char delim)
 {
@@ -97,6 +109,7 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 	if (csvHeader != CSV_HEADER)
 	{
 		std::cerr << "Missing or invalid header in CSV-file" << std::endl;
+		file.close();
 		return ;
 	}
 	while (file.good())
@@ -105,17 +118,13 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 		_exchangeRates.insert(std::pair<std::string, double>(date, rate));
 	}
 	file.close();
-	// printMap(_exchangeRates);
 }
-
-
 
 bool isValidDate(const std::string& dateString) 
 {
-    // Date string must be exactly 11 characters long (YYYY-MM-DD).
+    // Date string must be exactly 10 characters long (YYYY-MM-DD).
     if (dateString.length() != 10 || dateString[4] != '-' || dateString[7] != '-')
 	{
-		std::cout << "SHIT: " << std::endl;
         return (false);
 	}
 	
@@ -123,7 +132,8 @@ bool isValidDate(const std::string& dateString)
 	int month = atoi(dateString.substr(5, 2).c_str());
 	int day = atoi(dateString.substr(8, 2).c_str());
 	
-	if (year < 0 || month < 1 || month > 12 || day < 1 || day > 31) {
+	if (year < 0 || month < 1 || month > 12 || day < 1 || day > 31) 
+	{
         return false;  // Basic range checks
     }
     
@@ -149,20 +159,14 @@ bool isValidDate(const std::string& dateString)
 
 void BitcoinExchange::calcBtcToValue(const std::string& date, double amount) const
 {
-	// if (_exchangeRates.empty())
-	// {
-		// std::cerr << "Error: database must not be empty before calculating btc values." << std::endl;
-		// return ;
-	// }	
 	std::map<std::string, double>::const_iterator it = _exchangeRates.lower_bound(date);
 	if (it == _exchangeRates.begin() && date != it->first)
 	{
 		std::cout << "Error: Btc was invented on 3. Januar 2009 (wikipedia), even database wrong?? ¯\\_(ツ)_/¯ " << std::endl;
 		return;
 	}
-	// if (date != it->first)
-		// it--;
-	// (void)amount;
+	if (it == _exchangeRates.end() || date != it->first)
+		it--;
 	std::cout << date << " => " << amount << " = " << amount * it->second << std::endl;
 }
 
@@ -190,6 +194,7 @@ void BitcoinExchange::calcInputFile(const std::string& filename) const
 	if (inputHeader != INPUT_HEADER)
 	{
 		std::cerr << "Missing or invalid header in input file" << std::endl;
+		file.close();
 		return ;
 	}
 	while (file.good())
@@ -198,9 +203,9 @@ void BitcoinExchange::calcInputFile(const std::string& filename) const
 			continue;
 		else if (!isValidDate(date))
 			std::cout << "Error: bad input => " << date << std::endl;
-		else if (amount < 0)
+		else if (amount < LOWER_LIM)
 			std::cout << "Error: not a positive number" << std::endl;
-		else if (amount > std::numeric_limits<int>::max())
+		else if (amount > UPPER_LIM)
 			std::cout << "Error: too large a number" << std::endl;
 		else
 			calcBtcToValue(date, amount);
