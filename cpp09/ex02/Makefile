@@ -1,5 +1,6 @@
 NAME		= PmergeMe
-ARGS		= 3 5 9 7 4
+ARGS	= 1 5 6 8 2 20 12 16 3 18 4 19 17 11 9 11 0
+#ARGS = $$(shuf -i 1-1000 -n 100 | tr "\n" " ")
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -g
 
