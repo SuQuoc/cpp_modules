@@ -1,16 +1,17 @@
 
-# pragma once
+#pragma once
 
-# include <iostream>
-# include <sstream>
-# include <algorithm>
-# include <iterator>
-# include <fstream>
-# include <string>
-# include <vector>
-# include <deque>
-# include <list>
-# include <chrono>
+#include <sstream>
+#include <algorithm>
+#include <fstream>
+#include <string>
+#include <ctime>
+#include <vector>
+#include <deque>
+#include <iomanip>
+#include <iostream>
+
+
 
 # define DECIMAL_BASE 10
 # define K 20
@@ -40,29 +41,26 @@ private:
 	PmergeMe(const PmergeMe& src);
 	PmergeMe& operator=(const PmergeMe& rhs);
 
-public:
-	PmergeMe();
-	~PmergeMe();
 	void loadData_Vec(char **argv);
 	void insertion_Vec(int start, int end);
-	void sort_Vec(char **argv);
-	void mergeInsertSort_Vec(int start, int end);
 	void merge_Vec(int start, int pivot, int end);
+	void mergeInsertSort_Vec(int start, int end);
 
 	void loadData_Deq(char **argv);
 	void insertion_Deq(int start, int end);
-	void sort_Deq(char **argv);
-	void mergeInsertSort_Deq(int start, int end);
 	void merge_Deq(int start, int pivot, int end);
+	void mergeInsertSort_Deq(int start, int end);
 
+public:
+	PmergeMe();
+	~PmergeMe();
+	
+	void sort_Vec(char **argv);
+	void sort_Deq(char **argv);
+	
 	void printVec() const;
 	void printDeq() const;
 	
 	size_t getVecSize() const;
 	size_t getDeqSize() const;
-	
-	// void loadData_Vec();
-	// void mergeInsertionSort_Vec();
-
-
 };

@@ -1,7 +1,7 @@
 NAME		= btc
 ARGS		= input.txt
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -g
+CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -std=c++98 -g
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj
@@ -14,7 +14,7 @@ SRCS		= 	main.cpp \
 
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
-.PHONY: all clean fclean re run va scan
+.PHONY: all clean fclean re run va scan fun
 
 #Build________________________________________________________
 all: $(OBJ_PATH) $(NAME)
@@ -55,6 +55,10 @@ va: all
 
 scan: all
 	scan-build-12 \
+	./$(NAME) $(ARGS)
+
+fun: all
+	funcheck -a \
 	./$(NAME) $(ARGS)
 
 #COLORS_____________________________________________________________

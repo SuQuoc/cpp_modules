@@ -1,7 +1,7 @@
 NAME		= RPN
 ARGS		= "8 9 * 9 - 9 - 9 - 4 - 1 +"
 CXX			= c++
-CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -pedantic -g
+CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
 
 SRC_PATH 	= .
 OBJ_PATH 	= obj

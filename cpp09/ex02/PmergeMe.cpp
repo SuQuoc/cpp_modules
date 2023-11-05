@@ -21,11 +21,11 @@ size_t PmergeMe::getDeqSize() const { return _deq.size(); }
 //Vector______________________________________________________________________
 void PmergeMe::loadData_Vec(char **argv)
 {
-	if (argv == nullptr || argv[0] == nullptr)
+	if (argv == NULL || argv[0] == NULL)
 		throw std::bad_alloc();
 
 	std::string temp;
-	for (int i = 1; argv[i] != nullptr; ++i) 
+	for (int i = 1; argv[i] != NULL; ++i) 
 	{
 		temp = argv[i];
 		if (temp.find_first_not_of("0123456789") != std::string::npos)
@@ -109,11 +109,11 @@ void PmergeMe::sort_Vec(char **argv)
 //Deque______________________________________________________________________
 void PmergeMe::loadData_Deq(char **argv)
 {
-	if (argv == nullptr || argv[0] == nullptr)
+	if (argv == NULL || argv[0] == NULL)
 		throw std::bad_alloc();
 
 	std::string temp;
-	for (int i = 1; argv[i] != nullptr; ++i) 
+	for (int i = 1; argv[i] != NULL; ++i) 
 	{
 		temp = argv[i];
 		if (temp.find_first_not_of("0123456789") != std::string::npos)

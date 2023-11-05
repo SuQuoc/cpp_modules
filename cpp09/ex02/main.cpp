@@ -1,19 +1,39 @@
 
-# include "PmergeMe.hpp"
+#include "PmergeMe.hpp"
+#include <sys/time.h>
 
-typedef std::chrono::high_resolution_clock::time_point time_point_t;
-typedef std::chrono::microseconds duration_t;
-
-
-void printDuration(const time_point_t& start, size_t n_elements, const std::string& container)
+void printDuration(clock_t start, size_t n_elements, const std::string& container)
 {
-	time_point_t end = std::chrono::high_resolution_clock::now();
-	duration_t duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    std::cout << "Time to process a range of " 
+	clock_t end = clock();
+	long elapsed = end - start;
+    double elapsed_time = (double)elapsed / CLOCKS_PER_SEC * 1e6;
+
+	std::cout << std::fixed << std::setprecision(5);
+	std::cout << "Time to process a range of " 
 				<< n_elements << " elements with std::" << container << " : "
-				<< duration.count() << " us" << std::endl;
+				<< elapsed_time << " us" << std::endl;
+	// resetting (std)outputstream settings 
+	std::cout << std::setprecision(6);
+	std::cout.unsetf(std::ios::fixed);
 }
 
+void printDuration2(timeval start, size_t n_elements, const std::string& container)
+{
+	timeval end;
+    // Code to be timed
+
+    gettimeofday(&end, NULL);
+    long seconds = end.tv_sec - start.tv_sec;
+    long microseconds = end.tv_usec - start.tv_usec;
+    long elapsed = seconds * 1000000 + microseconds;
+
+	std::cout << "Time to process a range of " 
+				<< n_elements << " elements with std::" << container << " : "
+				<< std::fixed << std::setprecision(5) << elapsed << " us" << std::endl;
+	//resetting (std)outputstream settings 
+	std::cout << std::setprecision(6);
+	std::cout.unsetf(std::ios::fixed);
+}
 
 int main(int argc, char **argv)
 {
@@ -22,7 +42,7 @@ int main(int argc, char **argv)
 	try 
 	{
 		std::cout << "Before:";
-		for (int i = 1; argv[i] != nullptr; ++i)
+		for (int i = 1; argv[i] != NULL; ++i)
 			std::cout << " " << argv[i];
 		std::cout << std::endl;
 
@@ -31,15 +51,17 @@ int main(int argc, char **argv)
 		std::cout << "After: ";
 		test.printVec();
 
-		// PmergeMe p1;
-		// time_point_t start = std::chrono::high_resolution_clock::now();
-		// p1.sort_Vec(argv);
-		// printDuration(start, p1.getVecSize(), "vector");
-// 
-		// PmergeMe p2;
-		// start = std::chrono::high_resolution_clock::now();
-		// p2.sort_Deq(argv);
-		// printDuration(start, p2.getDeqSize(), "deque");
+	// 	PmergeMe p1;
+	// 	clock_t start = clock();
+	// 	p1.sort_Vec(argv);
+	// 	printDuration(start, p1.getVecSize(), "vector");
+// 	
+// 	
+	// 	PmergeMe p2;
+	// 	start = clock();
+	// 	p2.sort_Deq(argv);
+	// 	printDuration(start, p2.getDeqSize(), "deque");
+
 	}
 	catch (std::exception& e)
 	{
@@ -47,12 +69,13 @@ int main(int argc, char **argv)
 	}
 	
 	PmergeMe p1;
-	time_point_t start = std::chrono::high_resolution_clock::now();
+	clock_t start = clock();
 	p1.sort_Vec(argv);
 	printDuration(start, p1.getVecSize(), "vector");
 
+
 	PmergeMe p2;
-	start = std::chrono::high_resolution_clock::now();
+	start = clock();
 	p2.sort_Deq(argv);
 	printDuration(start, p2.getDeqSize(), "deque");
 	return 0;
