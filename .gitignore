@@ -1,3 +1,19 @@
+# Executable fils
+a.out
+cpp00/ex00/megaphone
+cpp00/ex00/phonebook
+cpp00/ex00/booking
+cpp01/**/zombies
+cpp01/ex04/replace
+cpp01/ex05/complain
+cpp01/ex06/harlFilter
+
+cpp09/**/btc
+cpp09/**/RPN
+cpp09/**/PmergeMe
+
+
+
 # Prerequisites
 *.d
 

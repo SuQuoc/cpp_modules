@@ -74,7 +74,7 @@ double RPN::calcPolNotation(std::string& equation)
 			calcSimple(*it);
 		}
 	}
-	if (_numbers.size() != 1)
+	if (_numbers.size() != 1) //if the ratio (operators = operands - 1) is not uphold
 		throw std::domain_error("input in incorrect reverse polish notation");
 	double result = _numbers.top();
 	_numbers.pop();

@@ -91,14 +91,14 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 	file.open(filename.c_str());
 	if (!file.is_open())
 	{
-		std::cerr << "Failed to open CSV-file" << std::endl;
+		printErrorByCode(OPEN_CSV_ERR);
 		return ;
 	}
 
 	getline(file, csvHeader, '\n');
 	if (csvHeader != CSV_HEADER)
 	{
-		std::cerr << "Missing or invalid header in CSV-file" << std::endl;
+		printErrorByCode(CSV_HDR_ERR);
 		file.close();
 		return ;
 	}
@@ -120,7 +120,7 @@ void BitcoinExchange::getCSVData(std::ifstream& file, std::string& date, double&
 	iss >> rate;
 	if (iss.fail())
 	{
-		std::cout << "Error: Invalid number in CSV file" << std::endl; 
+		printErrorByCode(CSV_DATA_ERR);
 		iss.clear();
 		return ;
 	}
@@ -137,21 +137,21 @@ void BitcoinExchange::calcInputFile(const std::string& filename) const
 
 	if (_exchangeRates.empty())
 	{
-		std::cerr << "Error: database must not be empty before calculating btc values." << std::endl;
+		printErrorByCode(EMPTY_DATA_ERR);
 		return ;
 	}
 
 	file.open(filename.c_str());
 	if (!file.is_open())
 	{
-		std::cerr << "Error could not open file." << std::endl;
+		printErrorByCode(OPEN_INP_ERR);
 		return ;
 	}
 
 	getline(file, inputHeader, '\n');
 	if (inputHeader != INPUT_HEADER)
 	{
-		std::cerr << "Missing or invalid header in input file" << std::endl;
+		printErrorByCode(INP_HDR_ERR);
 		file.close();
 		return ;
 	}
@@ -162,9 +162,9 @@ void BitcoinExchange::calcInputFile(const std::string& filename) const
 		else if (!isValidDate(date))
 			std::cout << "Error: bad input => " << date << std::endl;
 		else if (amount < LOWER_LIM)
-			std::cout << "Error: not a positive number" << std::endl;
+			printErrorByCode(LOW_LIM_ERR);
 		else if (amount > UPPER_LIM)
-			std::cout << "Error: too large a number" << std::endl;
+			printErrorByCode(UP_LIM_ERR);
 		else
 			calcBtcToValue(date, amount);
 	}
@@ -179,26 +179,27 @@ int BitcoinExchange::readInputLine(std::ifstream& file, std::string& date, doubl
 	std::pair<std::string, std::string> dateValuePair;
 
 	getline(file, line, '\n');
-	if (line.find(" | ") == std::string::npos)
+	if (line.find(" | ") == std::string::npos 
+		|| line.find_first_not_of("0123456789.- |") != std::string::npos
+		|| std::count(line.begin(), line.end(), ' ') != 2)
 	{
-		std::cout << "Error: incorrect format (date | value)" << std::endl; 
-		std::cout << "Date and value must be seperated by \" | \"" << std::endl; 
+		printErrorByCode(FORMAT_ERR);
 		return 1;
 	}
 	dateValuePair = splitString(line, delim);
 	if (dateValuePair.second.empty())
 	{
-		std::cout << "Error: no value found" << std::endl; 
+		printErrorByCode(INP_VALUE_ERR);
 		return 1;
 	}
-	if (dateValuePair.first.size() > 10)
+	if (dateValuePair.first.size() == 11)
 		dateValuePair.first.resize(10, 'X'); //removing the whitespace
 	date = dateValuePair.first;
 	iss.str(dateValuePair.second);
 	iss >> rate;
 	if (iss.fail() || !iss.eof())
 	{
-		std::cout << "Error: invalid number (number must end with a digit, be aware of whitespaces)" << std::endl; 
+		printErrorByCode(INP_VALUE_ERR);
 		iss.clear();
 		return 1;
 	}
@@ -211,7 +212,7 @@ void BitcoinExchange::calcBtcToValue(const std::string& date, double amount) con
 	std::map<std::string, double>::const_iterator it = _exchangeRates.lower_bound(date);
 	if (it == _exchangeRates.begin() && date != it->first)
 	{
-		std::cout << "Error: Btc was invented on 3. Januar 2009 (wikipedia), even database wrong?? ¯\\_(ツ)_/¯ " << std::endl;
+		printErrorByCode(BTC_BEGIN_ERR);
 		return;
 	}
 	if (it == _exchangeRates.end() || date != it->first)
@@ -219,3 +220,45 @@ void BitcoinExchange::calcBtcToValue(const std::string& date, double amount) con
 	std::cout << date << " => " << amount << " = " << amount * it->second << std::endl;
 }
 
+void BitcoinExchange::printErrorByCode(int errorCode) const
+{
+	switch(errorCode)
+	{
+		case OPEN_CSV_ERR:
+			std::cerr << "Error: Failed to open CSV-file." << std::endl;
+			break;
+		case CSV_HDR_ERR:
+			std::cerr << "Error: Missing or invalid header in CSV-file." << std::endl;
+			break;
+		case CSV_DATA_ERR:
+			std::cout << "Error: Invalid number in CSV file." << std::endl;
+			break;
+		case EMPTY_DATA_ERR:
+			std::cerr << "Error: database must not be empty before calculating btc values." << std::endl;
+			break;
+		case OPEN_INP_ERR:
+			std::cerr << "Error could not open file." << std::endl;
+			break;
+		case INP_HDR_ERR:
+			std::cerr << "Missing or invalid header in input file." << std::endl;
+			break;
+		case UP_LIM_ERR:
+			std::cout << "Error: too large a number." << std::endl;
+			break;
+		case LOW_LIM_ERR:
+			std::cout << "Error: not a positive number." << std::endl;
+			break;
+		case FORMAT_ERR:
+			std::cout << "Error: incorrect format (date | value)." << std::endl; 
+			std::cout << "Date and value must be seperated by \" | \"." << std::endl; 
+			break;
+		case INP_VALUE_ERR:
+			std::cout << "Error: invalid number (number must end with a digit, be aware of whitespaces)." << std::endl;
+			break;
+		case BTC_BEGIN_ERR:
+			std::cout << "Error: Btc was invented on 3. Januar 2009 (wikipedia), even database wrong?? ¯\\_(ツ)_/¯." << std::endl;
+			break;
+		default:
+			std::cout << "Invalid error code passed.";
+	}
+}

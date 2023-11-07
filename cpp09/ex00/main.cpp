@@ -13,5 +13,7 @@ int main(int argc, char **argv)
 	BitcoinExchange coinbase;
 	coinbase.loadCSV_Database("data.csv");
 	coinbase.calcInputFile(argv[1]);
+	// coinbase.loadCSV_Database("data.csv");
+	// coinbase.calcInputFile(argv[1]);
 	return 0;
 }
