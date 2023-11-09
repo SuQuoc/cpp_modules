@@ -41,8 +41,8 @@ private:
 	std::map<std::string, double> _exchangeRates;
 	
 	void calcBtcToValue(const std::string& date, double amount) const;
-	void getCSVData(std::ifstream& file, std::string& date, double& rate, char delim);
-	int readInputLine(std::ifstream& file, std::string& date, double& rate, char delim) const;
+	void getCSVData(std::ifstream& file, char delim);
+	int readInputLine(std::ifstream& file, std::string& date, double& amount, char delim) const;
 	
 	void printErrorByCode(int errorCode) const;
 public:

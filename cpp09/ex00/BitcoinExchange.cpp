@@ -1,5 +1,18 @@
 
 # include "BitcoinExchange.hpp"
+#include <stdlib.h> 
+
+bool isOnlyWhitespace(const std::string& str) 
+{
+    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) 
+	{
+       	if (!std::isspace(static_cast<unsigned char>(*it))) 
+	   	{
+            return false; // Found a non-whitespace character
+        }
+    }
+    return true; // All characters are whitespaces or the string is empty
+}
 
 std::pair<std::string, std::string> splitString(const std::string& str, char delimiter) 
 {
@@ -80,8 +93,7 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 {
 	std::ifstream file; 
 	std::string csvHeader;
-	std::string date;
-	double rate;
+	
 
 	if (!_exchangeRates.empty())
 	{
@@ -104,17 +116,21 @@ void BitcoinExchange::loadCSV_Database(const std::string& filename)
 	}
 	while (file.good())
 	{
-		getCSVData(file, date, rate, CSV_DELIM);
-		_exchangeRates.insert(std::pair<std::string, double>(date, rate));
+		getCSVData(file, CSV_DELIM);
 	}
 	file.close();
 }
 
-void BitcoinExchange::getCSVData(std::ifstream& file, std::string& date, double& rate, char delim)
+void BitcoinExchange::getCSVData(std::ifstream& file, char delim)
 {
 	std::istringstream iss;
 	std::string temp;
+	std::string date;
+	double rate;
+
 	getline(file, date, delim);
+	if (date.empty())
+		return ;
 	getline(file, temp, '\n');
 	iss.str(temp);
 	iss >> rate;
@@ -125,6 +141,7 @@ void BitcoinExchange::getCSVData(std::ifstream& file, std::string& date, double&
 		return ;
 	}
 	iss.clear();
+	_exchangeRates.insert(std::pair<std::string, double>(date, rate));
 }
 
 //Input file________________________________________________________________
@@ -172,13 +189,15 @@ void BitcoinExchange::calcInputFile(const std::string& filename) const
 }
 
 //at the end of the date as well as the beginning of the value must be a space
-int BitcoinExchange::readInputLine(std::ifstream& file, std::string& date, double& rate, char delim) const
+int BitcoinExchange::readInputLine(std::ifstream& file, std::string& date, double& amount, char delim) const
 {
 	std::istringstream iss;
 	std::string line;
 	std::pair<std::string, std::string> dateValuePair;
 
 	getline(file, line, '\n');
+	if (line.empty() || isOnlyWhitespace(line))
+		return 1;
 	if (line.find(" | ") == std::string::npos 
 		|| line.find_first_not_of("0123456789.- |") != std::string::npos
 		|| std::count(line.begin(), line.end(), ' ') != 2)
@@ -193,10 +212,10 @@ int BitcoinExchange::readInputLine(std::ifstream& file, std::string& date, doubl
 		return 1;
 	}
 	if (dateValuePair.first.size() == 11)
-		dateValuePair.first.resize(10, 'X'); //removing the whitespace
+		dateValuePair.first.resize(10); //removing the space at end of date
 	date = dateValuePair.first;
 	iss.str(dateValuePair.second);
-	iss >> rate;
+	iss >> amount;
 	if (iss.fail() || !iss.eof())
 	{
 		printErrorByCode(INP_VALUE_ERR);
@@ -222,6 +241,7 @@ void BitcoinExchange::calcBtcToValue(const std::string& date, double amount) con
 
 void BitcoinExchange::printErrorByCode(int errorCode) const
 {
+	std::map<std::string, double>::const_iterator it;
 	switch(errorCode)
 	{
 		case OPEN_CSV_ERR:
@@ -250,15 +270,15 @@ void BitcoinExchange::printErrorByCode(int errorCode) const
 			break;
 		case FORMAT_ERR:
 			std::cout << "Error: incorrect format (date | value)." << std::endl; 
-			std::cout << "Date and value must be seperated by \" | \"." << std::endl; 
 			break;
 		case INP_VALUE_ERR:
 			std::cout << "Error: invalid number (number must end with a digit, be aware of whitespaces)." << std::endl;
 			break;
 		case BTC_BEGIN_ERR:
-			std::cout << "Error: Btc was invented on 3. Januar 2009 (wikipedia), even database wrong?? ¯\\_(ツ)_/¯." << std::endl;
+			it = _exchangeRates.begin();
+			std::cout << "Error: No fitting date found according to database (earliest entry " << it->first << ")" << std::endl;
 			break;
 		default:
-			std::cout << "Invalid error code passed.";
+			std::cout << "Invalid error code passed." << std::endl;
 	}
 }

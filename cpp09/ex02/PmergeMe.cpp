@@ -1,22 +1,14 @@
 
 # include "PmergeMe.hpp"
 
-
-
-
 PmergeMe::PmergeMe(){}
 PmergeMe::~PmergeMe(){}
-
-
 
 void PmergeMe::printVec() const { printContainer(_vec); }
 void PmergeMe::printDeq() const { printContainer(_deq); }
 
 size_t PmergeMe::getVecSize() const { return _vec.size(); }
 size_t PmergeMe::getDeqSize() const { return _deq.size(); }
-
-
-
 
 //Vector______________________________________________________________________
 void PmergeMe::loadData_Vec(char **argv)
@@ -53,8 +45,8 @@ void PmergeMe::insertion_Vec(int start, int end)
 
 void PmergeMe::merge_Vec(int start, int pivot, int end)
 {
-	int n1 = pivot - start + 1;
-	int n2 = end - pivot;
+	int lSize = pivot - start + 1;
+	int rSize = end - pivot;
 
 	std::vector<size_t>leftArr(_vec.begin() + start, _vec.begin() + pivot + 1);
 	std::vector<size_t>rightArr(_vec.begin() + pivot + 1, _vec.begin() + end + 1);
@@ -64,9 +56,9 @@ void PmergeMe::merge_Vec(int start, int pivot, int end)
 
 	for (int i = start; i <= end ; i++)
 	{
-		if (leftIndx == n1)
+		if (leftIndx == lSize)
 			_vec[i] = rightArr[rightIndx++];
-		else if (rightIndx == n2)
+		else if (rightIndx == rSize)
 			_vec[i] = leftArr[leftIndx++];
 		else if (leftArr[leftIndx] < rightArr[rightIndx])
 			_vec[i] = leftArr[leftIndx++];

@@ -1,5 +1,5 @@
 NAME		= RPN
-ARGS		= "8 9 * 9 - 9 - 9 - 4 - 1 +"
+ARGS		= "1 9 * 9 - 9 - 9 - 4 - 1        +4"
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra -MMD -MP -std=c++98 -pedantic -g
 

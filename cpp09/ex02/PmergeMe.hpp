@@ -14,7 +14,7 @@
 
 
 # define DECIMAL_BASE 10
-# define K 20
+# define K 10
 
 template <typename T>
 void printContainer(T& container)

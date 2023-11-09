@@ -18,11 +18,9 @@ else
 fi
 
 
-<<COMMENT
-Here's what each part of the command does:
-
-find .: This command searches for files and directories starting from the current directory (.).
--type f: This option specifies that you're interested in files.
--name Makefile: This option looks for files named "Makefile."
--execdir make clean \; (or -execdir make fclean \;): 
-This part executes the make clean or make fclean command in the directory where the "Makefile" is found. The \; indicates the end of the -execdir command.
+#Heres what each part of the command does:
+#find .: This command searches for files and directories starting from the current directory (.).
+#type f: This option specifies that you're interested in files.
+#-name Makefile: This option looks for files named "Makefile."
+#-execdir make clean \; (or -execdir make fclean \;): 
+#This part executes the make clean or make fclean command in the directory where the "Makefile" is found. The \; indicates the end of the -execdir command.

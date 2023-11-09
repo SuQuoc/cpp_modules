@@ -55,6 +55,7 @@
 		"set": "cpp",
 		"map": "cpp",
 		"chrono": "cpp",
-		"ratio": "cpp"
+		"ratio": "cpp",
+		"cstring": "cpp"
 	}
 }
