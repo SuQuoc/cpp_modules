@@ -50,7 +50,7 @@ bool isValidDate(const std::string& dateString)
     if (month == 2)
 	{
         // Check for February
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) 
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
             return day <= 29; // Leap year
 		else
             return day <= 28; // Non-leap year

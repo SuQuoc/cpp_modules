@@ -1,7 +1,7 @@
 
 # include "PmergeMe.hpp"
 
-PmergeMe::PmergeMe(){}
+PmergeMe::PmergeMe(): _last(-1){}
 PmergeMe::~PmergeMe(){}
 
 void PmergeMe::printVec() const { printContainer(_vec); }
@@ -26,66 +26,6 @@ void PmergeMe::loadData_Vec(char **argv)
 	}
 }
 
-void PmergeMe::insertion_Vec(int start, int end)
-{
-	int j;
-	size_t toBeInserted;
-	for (int i = start; i < end; i++)
-	{
-		j = i + 1;
-		toBeInserted = _vec[j];
-		while (j > start && _vec[j - 1] > toBeInserted)
-		{
-			_vec[j] = _vec[j - 1];
-			j--;
-		}
-		_vec[j] = toBeInserted;
-	}
-}
-
-void PmergeMe::merge_Vec(int start, int pivot, int end)
-{
-	int lSize = pivot - start + 1;
-	int rSize = end - pivot;
-
-	std::vector<size_t>leftArr(_vec.begin() + start, _vec.begin() + pivot + 1);
-	std::vector<size_t>rightArr(_vec.begin() + pivot + 1, _vec.begin() + end + 1);
-
-	int leftIndx = 0;
-	int rightIndx = 0;
-
-	for (int i = start; i <= end ; i++)
-	{
-		if (leftIndx == lSize)
-			_vec[i] = rightArr[rightIndx++];
-		else if (rightIndx == rSize)
-			_vec[i] = leftArr[leftIndx++];
-		else if (leftArr[leftIndx] < rightArr[rightIndx])
-			_vec[i] = leftArr[leftIndx++];
-		else
-			_vec[i] = rightArr[rightIndx++];
-	}
-}
-
-void PmergeMe::mergeInsertSort_Vec(int start, int end)
-{
-	if (start > end || start < 0 || end < 0)
-	{
-		std::cout << "Error: start cant be bigger than end of container and both must be positive" << std::endl;
-		return ;
-	}
-	if (end - start > K)
-	{
-		int pivot = static_cast<int>((start + end) / 2); 
-		//gives me the middle, 0.5 doesnt matter -> below implementation handles it
-		mergeInsertSort_Vec(start, pivot);
-		mergeInsertSort_Vec(pivot + 1, end);
-		merge_Vec(start, pivot, end);
-	}
-	else 
-		insertion_Vec(start, end);
-}
-
 void PmergeMe::sort_Vec(char **argv)
 {
 	loadData_Vec(argv);
@@ -94,96 +34,184 @@ void PmergeMe::sort_Vec(char **argv)
 		std::cout << "Container is empty, nothing to sort" << std::endl;
 		return ;
 	}
-	mergeInsertSort_Vec(0, static_cast<int>(_vec.size() - 1));
+	FJohnsonSortVec();
+}
+
+//JOHNSON
+int PmergeMe::binarySearchVec(std::vector<size_t>& arr, size_t num, int left, int right)
+{
+    if (right <= left)
+        return (num > arr[left]) ? (left + 1) : left;
+ 
+    int mid = (left + right) / 2;
+ 
+    if (num == arr[mid]) 
+        return mid + 1; //doesnt matter if + or -
+ 
+    if (num > arr[mid])
+		return binarySearchVec(arr, num, mid + 1, right);
+    return binarySearchVec(arr, num, left, mid - 1);
 }
 
 
-//Deque______________________________________________________________________
-void PmergeMe::loadData_Deq(char **argv)
+void PmergeMe::FJohnsonSortVec()
 {
-	if (argv == NULL || argv[0] == NULL)
-		throw std::bad_alloc();
+	pair_vector pairs;
+	int odd;
+	int size = _vec.size();
 
-	std::string temp;
-	for (int i = 1; argv[i] != NULL; ++i) 
+	if (size <= 1)
+		return ;
+	if  (size % 2 == 0)
+		odd = 0;
+	else
+		odd = 1;
+	
+	generate_pairsVec(pairs);
+	sort_pairsVec(pairs);
+	_vec.clear();
+	
+	//creating main-chain
+	for (size_t i = 0; i < pairs.size(); i++) 
+	    _vec.push_back(pairs[i].second);
+	_vec.insert(_vec.begin(), pairs[0].first); //the smaller number of the smallest pair
+	
+	if (odd)
+		pairs.push_back(std::make_pair(_last, _last)); //pushing the lonely B to the pairs
+	
+	std::vector<int> indexForBs = getB_indicesVec(size / 2 + odd);
+	for (size_t i = 0; i < pairs.size() - 1; i++) // -1 kinda confusing cuz i insert b1 at main-chain
 	{
-		temp = argv[i];
-		if (temp.find_first_not_of("0123456789") != std::string::npos)
-			throw std::domain_error("invalid argument");
-	    _deq.push_back(strtoul(argv[i], NULL, DECIMAL_BASE));
-	}
+		int indx = binarySearchVec(_vec, pairs[indexForBs[i]].first, 0, _vec.size() - 1);
+	    _vec.insert(_vec.begin() + indx, pairs[indexForBs[i]].first);
+    }
+	return ;
 }
 
-void PmergeMe::insertion_Deq(int start, int end)
+void PmergeMe::sort_pairsVec(pair_vector& pairs)
 {
-	int j;
-	size_t toBeInserted;
-	for (int i = start; i < end; i++)
-	{
-		j = i + 1;
-		toBeInserted = _deq[j];
-		while (j > start && _deq[j - 1] > toBeInserted)
-		{
-			_deq[j] = _deq[j - 1];
-			j--;
-		}
-		_deq[j] = toBeInserted;
-	}
-}
+	if (pairs.size() <= 1) 
+        return ; 
 
-void PmergeMe::merge_Deq(int start, int pivot, int end)
-{
-	int lSize = pivot - start + 1;
-	int rSize = end - pivot;
-		
-	std::deque<size_t>leftArr(_deq.begin() + start, _deq.begin() + pivot + 1);
-	std::deque<size_t>rightArr(_deq.begin() + pivot + 1, _deq.begin() + end + 1);
+	int middle = pairs.size() / 2;
+	pair_vector leftArr(pairs.begin(), pairs.begin() + middle);
+	pair_vector rightArr(pairs.begin() + middle, pairs.end());
+
+	sort_pairsVec(leftArr);
+    sort_pairsVec(rightArr);
 
 	int leftIndx = 0;
 	int rightIndx = 0;
+	int lSize = leftArr.size();
+	int rSize = rightArr.size();
 
-	for (int i = start; i <= end; i++)
+	for (size_t i = 0; i < pairs.size() ; i++)
 	{
 		if (leftIndx == lSize)
-			_deq[i] = rightArr[rightIndx++];
+			pairs[i] = rightArr[rightIndx++];
 		else if (rightIndx == rSize)
-			_deq[i] = leftArr[leftIndx++];
-		else if (leftArr[leftIndx] < rightArr[rightIndx])
-			_deq[i] = leftArr[leftIndx++];
+			pairs[i] = leftArr[leftIndx++];
+		else if (leftArr[leftIndx].second < rightArr[rightIndx].second)
+			pairs[i] = leftArr[leftIndx++];
 		else
-			_deq[i] = rightArr[rightIndx++];
+			pairs[i] = rightArr[rightIndx++];
 	}
 }
 
-void PmergeMe::mergeInsertSort_Deq(int start, int end)
+void PmergeMe::generate_pairsVec(pair_vector& pairs) 
 {
-	if (start > end || start < 0 || end < 0)
+    if (_vec.size() % 2 != 0) 
 	{
-		std::cout << "Error: start cant be bigger than end of container and both must be positive" << std::endl;
-		return ;
-	}
-	if (end - start > K)
+        _last = _vec.back();
+        _vec.pop_back();
+    }
+    for (size_t i = 0; i < _vec.size(); i += 2) 
 	{
-		int pivot = (start + end) / 2;
-		//gives me the middle, 0.5 doesnt matter -> below implementation handles it
-		mergeInsertSort_Deq(start, pivot);
-		mergeInsertSort_Deq(pivot + 1, end);
-		merge_Deq(start, pivot, end);
-	}
-	else
-	{
-		insertion_Deq(start, end);
-	} 
+        // If the first element is bigger than the second, swap them
+        if (_vec[i] > _vec[i + 1]) //greater is always pair.second
+		{
+            std::swap(_vec[i], _vec[i + 1]);
+        }
+        pairs.push_back(std::make_pair(_vec[i], _vec[i + 1]));
+    }
 }
 
 
-void PmergeMe::sort_Deq(char **argv)
+//here my jacobs is the true jacobsthal number - 1
+std::vector<int> PmergeMe::getB_indicesVec(int numberOfBs)
 {
-	loadData_Deq(argv);
-	if (_deq.empty())
+    std::vector<int> indexForB;
+	int jacobs = 0;
+	int last_jacob;
+	int n = 0;
+	int j = 3;
+  
+    while (jacobs < numberOfBs)
 	{
-		std::cout << "Container is empty, nothing to sort" << std::endl;
-		return;
+		last_jacob = jacobs;
+		jacobs = getJacobsthalNumber(j) - 1;
+		if (jacobs > numberOfBs - 1)
+		{
+			for (n = numberOfBs - 1; n > last_jacob; n--)
+		    	indexForB.push_back(n);
+			break;
+		}
+		indexForB.push_back(jacobs);
+        for (n = jacobs - 1; n > last_jacob; n--)
+		    indexForB.push_back(n);
+		j++;
 	}
-	mergeInsertSort_Deq(0, static_cast<int>(_deq.size() - 1));
+	// std::cout << "Vector elements: ";
+    // for (std::vector<int>::iterator it = indexForB.begin(); it != indexForB.end(); ++it) {
+        // std::cout << *it + 1 << " ";
+    // }
+    // std::cout << std::endl;
+    return indexForB;
 }
+
+//HELPER___________________________________________________________
+size_t PmergeMe::getJacobsthalNumber(size_t n) const
+{
+    if (n == 0)
+        return 0;
+    else if (n == 1)
+        return 1;
+    else
+        return getJacobsthalNumber(n - 1) + 2 * getJacobsthalNumber(n - 2);
+}
+
+void PmergeMe::checkSort()
+{
+	for (size_t i = 1; i < _vec.size(); ++i) 
+	{
+        if (_vec[i - 1] > _vec[i]) 
+		{
+			std::cout << "Check: Vector is NOT sorted ❌" << std::endl;
+        }
+    }
+	std::cout << "Check: Vector is sorted ✅" << std::endl;
+	return ;
+}
+
+
+/* void PmergeMe::insertionSort(std::vector<size_t>& arr, int len)
+{
+    int i, loc, leftFromI, selected;
+ 
+    for (i = 1; i < len; ++i)
+    {
+        leftFromI = i - 1;
+        selected = arr[i];
+ 
+        // find location where selected should be inserted
+        loc = binarySearchVecVec(arr, selected, 0, leftFromI);
+ 
+        // Move all elements after location to create space
+        while (leftFromI >= loc)
+        {
+            arr[leftFromI + 1] = arr[leftFromI];
+            leftFromI--;
+        }
+        arr[leftFromI + 1] = selected;
+    }
+} */

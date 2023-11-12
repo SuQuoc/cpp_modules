@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 		test.sort_Vec(argv);
 		std::cout << "After: ";
 		test.printVec();
-
+		test.checkSort();
 	// 	PmergeMe p1;
 	// 	clock_t start = clock();
 	// 	p1.sort_Vec(argv);
@@ -68,15 +68,14 @@ int main(int argc, char **argv)
 		std::cerr << "Error: " << e.what() << std::endl;
 	}
 	
-	PmergeMe p1;
+	/* PmergeMe p1;
 	clock_t start = clock();
 	p1.sort_Vec(argv);
 	printDuration(start, p1.getVecSize(), "vector");
 
-
 	PmergeMe p2;
 	start = clock();
 	p2.sort_Deq(argv);
-	printDuration(start, p2.getDeqSize(), "deque");
+	printDuration(start, p2.getDeqSize(), "deque"); */
 	return 0;
 }
