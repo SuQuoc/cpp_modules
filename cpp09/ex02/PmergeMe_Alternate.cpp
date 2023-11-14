@@ -25,16 +25,14 @@ void PmergeMe::loadData_Vec(char **argv)
 			throw std::domain_error("invalid argument");
 		std::stringstream ss(temp);
 		ss >> number;
-		if (ss.fail() || number > std::numeric_limits<unsigned int>::max()) 
-			throw std::domain_error("overflow");
-		_vec.push_back(number);
-	}
+		if (ss.fail() || number > std::numeric_limits<unsigned long>::max()) 
+            std::cout << "Overflow occurred for: " << str << std::endl;
+	    _vec.push_back(strtoul(argv[i], NULL, DECIMAL_BASE));
+}
 }
 
 void PmergeMe::sort_Vec(char **argv)
 {
-	if (!_vec.empty())
-		_vec.clear();
 	loadData_Vec(argv);
 	if (_vec.empty())
 	{
@@ -42,6 +40,22 @@ void PmergeMe::sort_Vec(char **argv)
 		return ;
 	}
 	FJohnsonSortVec();
+}
+
+//JOHNSON
+int PmergeMe::binarySearchVec(std::vector<size_t>& arr, size_t num, int left, int right)
+{
+    if (right <= left)
+        return (num > arr[left]) ? (left + 1) : left;
+ 
+    int mid = (left + right) / 2;
+ 
+    if (num == arr[mid]) 
+        return mid + 1; //doesnt matter if + or -
+ 
+    if (num > arr[mid])
+		return binarySearchVec(arr, num, mid + 1, right);
+    return binarySearchVec(arr, num, left, mid - 1);
 }
 
 void PmergeMe::FJohnsonSortVec()
@@ -65,37 +79,22 @@ void PmergeMe::FJohnsonSortVec()
 	//creating main-chain
 	for (size_t i = 0; i < pairs.size(); i++) 
 	    _vec.push_back(pairs[i].second);
-	
-	//insertiing the smaller number of the smallest pair
-	_vec.insert(_vec.begin(), pairs[0].first);
+	_vec.insert(_vec.begin(), pairs[0].first); //the smaller number of the smallest pair
 	alreadyInserted = 1;
 	
-	//pushing the lonely B to the pairs, second value doenst matter
 	if (odd)
-		pairs.push_back(std::make_pair(_last, _last)); 
+		pairs.push_back(std::make_pair(_last, _last)); //pushing the lonely B to the pairs
 	
 	std::vector<int> indexForBs = getB_indicesVec(size / 2 + odd);
+	printContainer(indexForBs);
 	for (size_t i = 0; i < pairs.size() - 1; i++) // -1 kinda confusing cuz i insert b1 at main-chain
 	{
+		// if (indexForBs[i])
 		int indx = binarySearchVec(_vec, pairs[indexForBs[i]].first, 0, indexForBs[i] - 1 + alreadyInserted);
 	    _vec.insert(_vec.begin() + indx, pairs[indexForBs[i]].first);
 		alreadyInserted++;
     }
 	return ;
-}
-int PmergeMe::binarySearchVec(std::vector<size_t>& arr, size_t num, int left, int right)
-{
-    if (right <= left)
-        return (num > arr[left]) ? (left + 1) : left;
- 
-    int mid = (left + right) / 2;
- 
-    if (num == arr[mid]) 
-        return mid + 1; //doesnt matter if + or -
- 
-    if (num > arr[mid])
-		return binarySearchVec(arr, num, mid + 1, right);
-    return binarySearchVec(arr, num, left, mid - 1);
 }
 
 void PmergeMe::sort_pairsVec(pair_vector& pairs)
@@ -147,8 +146,8 @@ void PmergeMe::generate_pairsVec(pair_vector& pairs)
 }
 
 
-//here my jacobs is the true jacobsthal number - 1 to get the correct indices
-std::vector<int> PmergeMe::getB_indicesVec(int numberOfBs) const
+//here my jacobs is the true jacobsthal number - 1
+std::vector<int> PmergeMe::getB_indicesVec(int numberOfBs)
 {
     std::vector<int> indexForB;
 	int jacobs = 0;
@@ -178,7 +177,6 @@ std::vector<int> PmergeMe::getB_indicesVec(int numberOfBs) const
 //Deque___________________________________________________________
 void PmergeMe::loadData_Deq(char **argv)
 {
-	size_t number;
 	if (argv == NULL || argv[0] == NULL)
 		throw std::bad_alloc();
 
@@ -188,65 +186,19 @@ void PmergeMe::loadData_Deq(char **argv)
 		temp = argv[i];
 		if (temp.find_first_not_of("0123456789") != std::string::npos)
 			throw std::domain_error("invalid argument");
-		std::stringstream ss(temp);
-		ss >> number;
-		if (ss.fail() || number > std::numeric_limits<unsigned int>::max()) 
-			throw std::domain_error("overflow");
-		_deq.push_back(number);
+	    _deq.push_back(strtoul(argv[i], NULL, DECIMAL_BASE));
 	}
 }
 
 void PmergeMe::sort_Deq(char **argv)
 {
-	if (!_deq.empty())
-		_deq.clear();
 	loadData_Deq(argv);
 	if (_deq.empty())
 	{
 		std::cout << "Container is empty, nothing to sort" << std::endl;
 		return ;
 	}
-	FJohnsonSortDeq();
-}
-
-void PmergeMe::FJohnsonSortDeq()
-{
-	pair_deque pairs;
-	int odd;
-	int alreadyInserted;
-	int size = _deq.size();
-
-	if (size <= 1)
-		return ;
-	if  (size % 2 == 0)
-		odd = 0;
-	else
-		odd = 1;
-	
-	generate_pairsDeq(pairs);
-	sort_pairsDeq(pairs);
-	_deq.clear();
-	
-	//creating main-chain
-	for (size_t i = 0; i < pairs.size(); i++) 
-	    _deq.push_back(pairs[i].second);
-	
-	//insertiing the smaller number of the smallest pair
-	_deq.insert(_deq.begin(), pairs[0].first);
-	alreadyInserted = 1;
-	
-	//pushing the lonely B to the pairs, second value doenst matter
-	if (odd)
-		pairs.push_back(std::make_pair(_last, _last)); 
-	
-	std::deque<int> indexForBs = getB_indicesDeq(size / 2 + odd);
-	for (size_t i = 0; i < pairs.size() - 1; i++) // -1 kinda confusing cuz i insert b1 at main-chain
-	{
-		int indx = binarySearchDeq(_deq, pairs[indexForBs[i]].first, 0, indexForBs[i] - 1 + alreadyInserted);
-	    _deq.insert(_deq.begin() + indx, pairs[indexForBs[i]].first);
-		alreadyInserted++;
-    }
-	return ;
+	FJohnsonSortDeq(_deq);
 }
 
 int PmergeMe::binarySearchDeq(std::deque<size_t>& arr, size_t num, int left, int right)
@@ -262,6 +214,56 @@ int PmergeMe::binarySearchDeq(std::deque<size_t>& arr, size_t num, int left, int
     if (num > arr[mid])
 		return binarySearchDeq(arr, num, mid + 1, right);
     return binarySearchDeq(arr, num, left, mid - 1);
+}
+
+void sortEachPair(std::deque<size_t>& arr)
+{
+	for (size_t i = 0; i < arr.size() - 1; i += 2) 
+	{
+        // If the first element is bigger than the second, swap them
+        if (arr[i] > arr[i + 1]) //greater is always pair.second
+		{
+            std::swap(arr[i], arr[i + 1]);
+        }
+    }
+}
+
+void PmergeMe::FJohnsonSortDeq(std::deque<size_t>& arr)
+{
+	pair_deque pairs;
+	std::deque<size_t>biggerNums;
+	int odd;
+	int size = arr.size();
+
+	if (size <= 1)
+		return ;
+	if  (size % 2 == 0)
+		odd = 0;
+	else
+		odd = 1;
+	
+	sortEachPair(arr);
+	for (size_t i = 1; i < arr.size(); i+=2) 
+	    biggerNums.push_back(arr[i]);
+
+	FJohnsonSortDeq(biggerNums);
+	// arr.clear();
+	
+	//creating main-chain
+	for (size_t i = 1; i < arr.size(); i+=2) 
+	    arr.push_back(pairs[i].second);
+	arr.insert(arr.begin(), pairs[0].first); //the smaller number of the smallest pair
+	
+	if (odd)
+		pairs.push_back(std::make_pair(_last, _last)); //pushing the lonely B to the pairs
+	std::deque<int> indexForBs = getB_indicesDeq(size / 2 + odd);
+	for (size_t i = 0; i < pairs.size() - 1; i++) // -1 kinda confusing cuz i insert b1 at main-chain
+	{
+		std::cout << "pairs.size -1: " << pairs.size() - 1 << std::endl;
+		int indx = binarySearchDeq(arr, pairs[indexForBs[i]].first, 0, arr.size() - 1);
+	    arr.insert(arr.begin() + indx, pairs[indexForBs[i]].first);
+    }
+	return ;
 }
 
 void PmergeMe::sort_pairsDeq(pair_deque& pairs)
@@ -294,26 +296,30 @@ void PmergeMe::sort_pairsDeq(pair_deque& pairs)
 	}
 }
 
-void PmergeMe::generate_pairsDeq(pair_deque& pairs) 
+
+
+
+void PmergeMe::generate_pairsDeq(pair_deque& pairs, std::deque<size_t>& arr) 
 {
-    if (_deq.size() % 2 != 0) 
+    if (arr.size() % 2 != 0) 
 	{
-        _last = _deq.back();
-        _deq.pop_back();
+        _last = arr.back();
+        arr.pop_back();
     }
-    for (size_t i = 0; i < _deq.size(); i += 2) 
+    for (size_t i = 0; i < arr.size(); i += 2) 
 	{
         // If the first element is bigger than the second, swap them
-        if (_deq[i] > _deq[i + 1]) //greater is always pair.second
+        if (arr[i] > arr[i + 1]) //greater is always pair.second
 		{
-            std::swap(_deq[i], _deq[i + 1]);
+            std::swap(arr[i], arr[i + 1]);
         }
-        pairs.push_back(std::make_pair(_deq[i], _deq[i + 1]));
+        pairs.push_back(std::make_pair(arr[i], arr[i + 1]));
     }
 }
 
+
 //here my jacobs is the true jacobsthal number - 1
-std::deque<int> PmergeMe::getB_indicesDeq(int numberOfBs) const
+std::deque<int> PmergeMe::getB_indicesDeq(int numberOfBs)
 {
     std::deque<int> indexForB;
 	int jacobs = 0;
@@ -379,3 +385,25 @@ void PmergeMe::checkSortDeq()
 	std::cout << "Check: deque is sorted ✅" << std::endl;
 	return ;
 }
+
+/* void PmergeMe::insertionSort(std::vector<size_t>& arr, int len)
+{
+    int i, loc, leftFromI, selected;
+ 
+    for (i = 1; i < len; ++i)
+    {
+        leftFromI = i - 1;
+        selected = arr[i];
+ 
+        // find location where selected should be inserted
+        loc = binarySearchVecVec(arr, selected, 0, leftFromI);
+ 
+        // Move all elements after location to create space
+        while (leftFromI >= loc)
+        {
+            arr[leftFromI + 1] = arr[leftFromI];
+            leftFromI--;
+        }
+        arr[leftFromI + 1] = selected;
+    }
+} */

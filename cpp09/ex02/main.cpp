@@ -17,7 +17,7 @@ void printDuration(clock_t start, size_t n_elements, const std::string& containe
 	std::cout.unsetf(std::ios::fixed);
 }
 
-void printDuration2(timeval start, size_t n_elements, const std::string& container)
+/* void printDuration2(timeval start, size_t n_elements, const std::string& container)
 {
 	timeval end;
     // Code to be timed
@@ -33,7 +33,7 @@ void printDuration2(timeval start, size_t n_elements, const std::string& contain
 	//resetting (std)outputstream settings 
 	std::cout << std::setprecision(6);
 	std::cout.unsetf(std::ios::fixed);
-}
+} */
 
 int main(int argc, char **argv)
 {
@@ -41,41 +41,31 @@ int main(int argc, char **argv)
 		return 1;
 	try 
 	{
+		PmergeMe test;
+		test.sort_Deq(argv);
+
 		std::cout << "Before:";
 		for (int i = 1; argv[i] != NULL; ++i)
 			std::cout << " " << argv[i];
 		std::cout << std::endl;
 
-		PmergeMe test;
-		test.sort_Vec(argv);
 		std::cout << "After: ";
-		test.printVec();
-		test.checkSort();
-	// 	PmergeMe p1;
-	// 	clock_t start = clock();
-	// 	p1.sort_Vec(argv);
-	// 	printDuration(start, p1.getVecSize(), "vector");
-// 	
-// 	
-	// 	PmergeMe p2;
-	// 	start = clock();
-	// 	p2.sort_Deq(argv);
-	// 	printDuration(start, p2.getDeqSize(), "deque");
+		test.printDeq();
+		test.checkSortDeq();
 
+		PmergeMe p1;
+		clock_t start = clock();
+		p1.sort_Vec(argv);
+		printDuration(start, p1.getVecSize(), "vector");
+
+		PmergeMe p2;
+		start = clock();
+		p2.sort_Deq(argv);
+		printDuration(start, p2.getDeqSize(), "deque");
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << "Error: " << e.what() << std::endl;
+		std::cout << "Error: " << e.what() << std::endl;
 	}
-	
-	/* PmergeMe p1;
-	clock_t start = clock();
-	p1.sort_Vec(argv);
-	printDuration(start, p1.getVecSize(), "vector");
-
-	PmergeMe p2;
-	start = clock();
-	p2.sort_Deq(argv);
-	printDuration(start, p2.getDeqSize(), "deque"); */
 	return 0;
 }

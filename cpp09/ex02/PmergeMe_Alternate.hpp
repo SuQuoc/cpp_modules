@@ -10,7 +10,6 @@
 #include <deque>
 #include <iomanip>
 #include <iostream>
-#include <limits>
 
 
 
@@ -53,15 +52,14 @@ private:
 	void generate_pairsVec(pair_vector& pairs);
 	void sort_pairsVec(pair_vector& pairs);
 	int binarySearchVec(std::vector<size_t>& arr, size_t num, int left, int right);
-	std::vector<int> getB_indicesVec(int numberOfBs) const;
+	std::vector<int> getB_indicesVec(int numberOfBs);
 	
-	//Deque
 	void loadData_Deq(char **argv);
-	void FJohnsonSortDeq();
-	void generate_pairsDeq(pair_deque& pairs);
+	void FJohnsonSortDeq(std::deque<size_t>& arr);
+	void generate_pairsDeq(pair_deque& pairs, std::deque<size_t>& arr);
 	void sort_pairsDeq(pair_deque& pairs);
 	int binarySearchDeq(std::deque<size_t>& arr, size_t num, int left, int right);
-	std::deque<int> getB_indicesDeq(int numberOfBs) const;
+	std::deque<int> getB_indicesDeq(int numberOfBs);
 public:
 	PmergeMe();
 	~PmergeMe();

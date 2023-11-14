@@ -30,7 +30,7 @@ std::pair<std::string, std::string> splitString(const std::string& str, char del
     return std::make_pair(firstPart, secondPart);
 }
 
-bool isValidDate(const std::string& dateString) 
+bool isValidDate(const std::string& dateString)
 {
     // Date string must be exactly 10 characters long (YYYY-MM-DD).
     if (dateString.length() != 10 || dateString[4] != '-' || dateString[7] != '-')
@@ -245,22 +245,22 @@ void BitcoinExchange::printErrorByCode(int errorCode) const
 	switch(errorCode)
 	{
 		case OPEN_CSV_ERR:
-			std::cerr << "Error: Failed to open CSV-file." << std::endl;
+			std::cout << "Error: Failed to open CSV-file." << std::endl;
 			break;
 		case CSV_HDR_ERR:
-			std::cerr << "Error: Missing or invalid header in CSV-file." << std::endl;
+			std::cout << "Error: Missing or invalid header in CSV-database." << std::endl;
 			break;
 		case CSV_DATA_ERR:
 			std::cout << "Error: Invalid number in CSV file." << std::endl;
 			break;
 		case EMPTY_DATA_ERR:
-			std::cerr << "Error: database must not be empty before calculating btc values." << std::endl;
+			std::cout << "Error: database must not be empty before calculating btc values." << std::endl;
 			break;
 		case OPEN_INP_ERR:
-			std::cerr << "Error could not open file." << std::endl;
+			std::cout << "Error could not open file." << std::endl;
 			break;
 		case INP_HDR_ERR:
-			std::cerr << "Missing or invalid header in input file." << std::endl;
+			std::cout << "Missing or invalid header in input file." << std::endl;
 			break;
 		case UP_LIM_ERR:
 			std::cout << "Error: too large a number." << std::endl;

@@ -43,6 +43,8 @@ void RPN::calcSimple(char opr)
 			_numbers.push(firstOperand * secondOperand);
 			break;
 		case '/':
+			if (secondOperand == 0)
+				throw std::invalid_argument("division by zero");
 			_numbers.push(firstOperand / secondOperand);
 			break;
 		default:

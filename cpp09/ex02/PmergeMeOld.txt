@@ -185,7 +185,7 @@ void PmergeMe::sort_Deq(char **argv)
 		std::cout << "Container is empty, nothing to sort" << std::endl;
 		return;
 	}
-	mergeInsertSort_Deq(0, static_cast<int>(_deq.size() - 1));
+	FJohnsonSortDeq(_deq);
 }
 
 
