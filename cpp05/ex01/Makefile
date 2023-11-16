@@ -12,7 +12,6 @@ SRCS		= 	main.cpp \
 				Bureaucrat.cpp \
 				Form.cpp
 
-
 OBJS      = $(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
 .PHONY: all clean fclean re run va

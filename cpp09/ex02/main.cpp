@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	try 
 	{
 		PmergeMe test;
-		test.sort_Deq(argv);
+		test.sort_Vec(argv);
 
 		std::cout << "Before:";
 		for (int i = 1; argv[i] != NULL; ++i)
@@ -50,8 +50,8 @@ int main(int argc, char **argv)
 		std::cout << std::endl;
 
 		std::cout << "After: ";
-		test.printDeq();
-		test.checkSortDeq();
+		test.printVec();
+		// test.checkSortVec();
 
 		PmergeMe p1;
 		clock_t start = clock();

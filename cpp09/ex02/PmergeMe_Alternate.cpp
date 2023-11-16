@@ -1,5 +1,5 @@
 
-# include "PmergeMe.hpp"
+# include "PmergeMe_Alternate.hpp"
 
 PmergeMe::PmergeMe(): _last(-1){}
 PmergeMe::~PmergeMe(){}
@@ -26,7 +26,7 @@ void PmergeMe::loadData_Vec(char **argv)
 		std::stringstream ss(temp);
 		ss >> number;
 		if (ss.fail() || number > std::numeric_limits<unsigned long>::max()) 
-            std::cout << "Overflow occurred for: " << str << std::endl;
+            std::cout << "Overflow occurred for: " << std::endl;
 	    _vec.push_back(strtoul(argv[i], NULL, DECIMAL_BASE));
 }
 }
@@ -232,6 +232,8 @@ void PmergeMe::FJohnsonSortDeq(std::deque<size_t>& arr)
 {
 	pair_deque pairs;
 	std::deque<size_t>biggerNums;
+	size_t last;
+	int alreadyInserted;
 	int odd;
 	int size = arr.size();
 
@@ -240,28 +242,40 @@ void PmergeMe::FJohnsonSortDeq(std::deque<size_t>& arr)
 	if  (size % 2 == 0)
 		odd = 0;
 	else
+	{
 		odd = 1;
+		last = arr.back();
+		// std::cout << "last: " << last << std::endl;
+	}
 	
-	sortEachPair(arr);
-	for (size_t i = 1; i < arr.size(); i+=2) 
-	    biggerNums.push_back(arr[i]);
+	generate_pairsDeq(pairs, arr);
+	// sortEachPair(arr);
+	// std::cout << "biggerNUms: ";
+	for (size_t i = 0; i < pairs.size(); i++) 
+	{
+	    biggerNums.push_back(pairs[i].second);
+		// std::cout << pairs[i].second << "|" << std::endl;
+	}
 
 	FJohnsonSortDeq(biggerNums);
-	// arr.clear();
-	
+	arr.clear();
+	// sort_pairsDeq(pairs);
 	//creating main-chain
-	for (size_t i = 1; i < arr.size(); i+=2) 
+	for (size_t i = 0; i < pairs.size(); i++) 
 	    arr.push_back(pairs[i].second);
 	arr.insert(arr.begin(), pairs[0].first); //the smaller number of the smallest pair
-	
+	alreadyInserted = 1;
+
+
 	if (odd)
-		pairs.push_back(std::make_pair(_last, _last)); //pushing the lonely B to the pairs
+		pairs.push_back(std::make_pair(last, last)); //pushing the lonely B to the pairs
 	std::deque<int> indexForBs = getB_indicesDeq(size / 2 + odd);
 	for (size_t i = 0; i < pairs.size() - 1; i++) // -1 kinda confusing cuz i insert b1 at main-chain
 	{
-		std::cout << "pairs.size -1: " << pairs.size() - 1 << std::endl;
-		int indx = binarySearchDeq(arr, pairs[indexForBs[i]].first, 0, arr.size() - 1);
+		// std::cout << "pairs.size -1: " << pairs.size() - 1 << std::endl;
+		int indx = binarySearchDeq(arr, pairs[indexForBs[i]].first, 0, indexForBs[i] - 1 + alreadyInserted);
 	    arr.insert(arr.begin() + indx, pairs[indexForBs[i]].first);
+		alreadyInserted++;
     }
 	return ;
 }
@@ -363,7 +377,7 @@ void PmergeMe::checkSortVec()
         if (_vec[i - 1] > _vec[i]) 
 		{
 			std::cout << "Check: Vector is NOT sorted ❌" << std::endl;
-			std::cout << "Check: " << _vec[i] << std::endl;
+			// std::cout << "Check: " << _vec[i] << std::endl;
 
 			return ;
 		}
