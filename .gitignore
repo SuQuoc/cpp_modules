@@ -12,6 +12,10 @@ cpp09/**/btc
 cpp09/**/RPN
 cpp09/**/PmergeMe
 
+
+# VSCode
+.vscode
+
 # Prerequisites
 *.d
 
